@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="FluentConfiguration"
+    targetNamespace="http://xml.beta.jitime-project.com/schema"
+    elementFormDefault="qualified"
+    xmlns="http://xml.beta.jitime-project.com/schema"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="fluentConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="fluentConfigurationDatabaseDispatchers">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fluentConfigurationDatabaseDispatcher">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="assemblies">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="assembly" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="namespace" use="required" type="xs:string" />
+                              <xs:attribute name="key" use="required"  type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="databaseType" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="SQL_SERVER_2000"/>
+                        <xs:enumeration value="SQL_SERVER_2005"/>
+                        <xs:enumeration value="SQL_SERVER_2008"/>
+                        <xs:enumeration value="SQL_SERVER_2012"/>
+                        <xs:enumeration value="SQL_SERVER_CE"/>
+                        <xs:enumeration value="POSTGRE"/>
+                        <xs:enumeration value="SQLITE"/>
+                        <xs:enumeration value="ORACLE_10G"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="connectionStringName" use="required" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
