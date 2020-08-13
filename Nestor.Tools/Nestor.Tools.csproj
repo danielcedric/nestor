@@ -3,14 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.1</LangVersion>
-    <PackageId>Nestor.Tools</PackageId>
-    <Authors>CDANIEL</Authors>
-    <Owners>Cédric DANIEL</Owners>
-    <PackageTags>CDANIEL Nestor Tools</PackageTags>
-    <Title>Nestor.Tools</Title>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackOnBuild>true</PackOnBuild>
-    <PackageVersion>0.0.0</PackageVersion>
   </PropertyGroup>
     
     
