@@ -11,10 +11,10 @@ using Nestor.Tools.Infrastructure.EntityFramework.Exceptions;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 {
-    public abstract class NestorRepository<TEntity> : NestorRepository<TEntity, long>
+    public abstract class NestorDbRepository<TEntity> : NestorDbRepository<TEntity, long>
         where TEntity : class, IEntityWithId<long>
     {
-        public NestorRepository(DbContext dbContext) : base(dbContext)
+        public NestorDbRepository(DbContext dbContext) : base(dbContext)
         {
         }
     }
@@ -25,7 +25,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
     /// <typeparam name="TContext">Contexte Entity Framework</typeparam>
     /// <typeparam name="TEntity">Type de l'entité concernée</typeparam>
     /// <typeparam name="TId">Type d'identifiant</typeparam>
-    public abstract class NestorRepository<TEntity, TId> : IRepository<TEntity, TId>
+    public abstract class NestorDbRepository<TEntity, TId> : IRepository<TEntity, TId>
         where TEntity : class, IEntityWithId<TId>
     {
         //public NestorRepository(IDesignTimeDbContextFactory<DbContext> factory, params string[] args)
@@ -33,7 +33,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         //    this.Context = factory.CreateDbContext(args) as TContext;
         //}
 
-        public NestorRepository(DbContext context)
+        public NestorDbRepository(DbContext context)
         {
             Context = context;
         }
