@@ -2,7 +2,7 @@
 {
     public class CollectionIsReadOnlyException : NestorException
     {
-        public CollectionIsReadOnlyException(): base("The collection is read-only")
+        public CollectionIsReadOnlyException() : base("The collection is read-only")
         {
         }
     }

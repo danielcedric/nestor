@@ -3,27 +3,33 @@ using System.Configuration;
 
 namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
 {
-    public class FluentConfigurationAssemblyCollection : ConfigurationElementCollection, IList<FluentConfigurationAssemblyElement>
+    public class FluentConfigurationAssemblyCollection : ConfigurationElementCollection,
+        IList<FluentConfigurationAssemblyElement>
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         public FluentConfigurationAssemblyElement this[int index]
         {
-            get
-            {
-                return base.BaseGet(index) as FluentConfigurationAssemblyElement;
-            }
+            get => BaseGet(index) as FluentConfigurationAssemblyElement;
             set
             {
-                if (base.BaseGet(index) != null)
-                    base.BaseRemoveAt(index);
+                if (BaseGet(index) != null)
+                    BaseRemoveAt(index);
 
-                this.BaseAdd(index, value);
+                BaseAdd(index, value);
             }
         }
+
+        #region IEnumerable<FluentConfigurationAssemblyElement> Membres
+
+        public new IEnumerator<FluentConfigurationAssemblyElement> GetEnumerator()
+        {
+            for (var i = 0; i < Count; i++) yield return BaseGet(i) as FluentConfigurationAssemblyElement;
+        }
+
+        #endregion
 
         protected override ConfigurationElement CreateNewElement()
         {
@@ -32,7 +38,7 @@ namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((FluentConfigurationAssemblyElement)element).Key;
+            return ((FluentConfigurationAssemblyElement) element).Key;
         }
 
         #region IList<FluentConfigurationAssemblyElement> Membres
@@ -76,29 +82,12 @@ namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
             base.CopyTo(array, arrayIndex);
         }
 
-        public new bool IsReadOnly
-        {
-            get { return IsReadOnly; }
-        }
+        public new bool IsReadOnly => IsReadOnly;
 
         public bool Remove(FluentConfigurationAssemblyElement item)
         {
             BaseRemove(GetElementKey(item));
             return true;
-        }
-
-        #endregion
-
-        #region IEnumerable<FluentConfigurationAssemblyElement> Membres
-
-        public new IEnumerator<FluentConfigurationAssemblyElement> GetEnumerator()
-        {
-            for (int i = 0; i < base.Count; i++)
-            {
-                yield return base.BaseGet(i) as FluentConfigurationAssemblyElement;
-            }
-
-            yield break;
         }
 
         #endregion

@@ -1,65 +1,68 @@
-﻿using Nestor.Tools.Languages;
-using System;
+﻿using System;
+using Nestor.Tools.Languages;
 
 namespace Nestor.Tools.Algorithms
 {
     /// <summary>
-    /// Type de vérification par l'algorithme de Luhn.
+    ///     Type de vérification par l'algorithme de Luhn.
     /// </summary>
     public enum LuhnCheckType
     {
         /// <summary>
-        /// Aucun.
+        ///     Aucun.
         /// </summary>
         None = 0,
+
         /// <summary>
-        /// Carte de crédit.
+        ///     Carte de crédit.
         /// </summary>
         CreditCard = 1,
+
         /// <summary>
-        /// Siren.
+        ///     Siren.
         /// </summary>
         Siren = 2,
+
         /// <summary>
-        /// Siret.
+        ///     Siret.
         /// </summary>
         Siret = 3
     }
 
 
     /// <summary>
-    /// Algorithme de Luhn.
+    ///     Algorithme de Luhn.
     /// </summary>
-    /// <remarks>L'algorithme de Luhn est décrit ici :
-    /// http://en.wikipedia.org/wiki/Luhn_algorithm.
+    /// <remarks>
+    ///     L'algorithme de Luhn est décrit ici :
+    ///     http://en.wikipedia.org/wiki/Luhn_algorithm.
     /// </remarks>
     public static class Luhn
     {
-
         /// <summary>
-        /// Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
+        ///     Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
         /// </summary>
         /// <param name="number">Nombre à vérifier.</param>
         /// <returns>Vrai si le nombre est valide selon l'algorithme de Luhn, faux sinon.</returns>
         public static bool Check(long number)
         {
-            return Luhn.Check(number.ToString(), -1);
+            return Check(number.ToString(), -1);
         }
 
 
         /// <summary>
-        /// Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
+        ///     Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
         /// </summary>
         /// <param name="number">Nombre à vérifier.</param>
         /// <returns>Vrai si le nombre est valide selon l'algorithme de Luhn, faux sinon.</returns>
         public static bool Check(string number)
         {
-            return Luhn.Check(number, -1);
+            return Check(number, -1);
         }
 
 
         /// <summary>
-        /// Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
+        ///     Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
         /// </summary>
         /// <param name="number">Nombre à vérifier.</param>
         /// <param name="length">Longueur de la chaîne.</param>
@@ -86,46 +89,46 @@ namespace Nestor.Tools.Algorithms
 
             #endregion
 
-            int numberLength = number.Length;
-            int figure = 0;
-            int total = 0;
-            int position = 1;
+            var numberLength = number.Length;
+            var figure = 0;
+            var total = 0;
+            var position = 1;
 
-            for (int i = numberLength; i > 0; i--)
+            for (var i = numberLength; i > 0; i--)
             {
                 // Récupérer le chiffre en position courante :
                 figure = int.Parse(number[i - 1].ToString());
 
                 // Multiplier ce chiffre par 2 ou 1 en fonction de sa position :
-                figure = figure * ((position % 2 == 0) ? 2 : 1);
+                figure = figure * (position % 2 == 0 ? 2 : 1);
 
                 // Retirer 9 si le résultat obtenu est > 10
                 // (équivaut à ajouter le chiffre des dizaines et celui des unités) :
-                figure = (figure >= 10) ? figure - 9 : figure;
+                figure = figure >= 10 ? figure - 9 : figure;
 
                 total += figure;
                 position++;
             }
 
             // Le chiffre valide pour la formule de Luhn, s'il est congru au modulo 10 :
-            return (total % 10 == 0);
+            return total % 10 == 0;
         }
 
 
         /// <summary>
-        /// Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
+        ///     Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
         /// </summary>
         /// <param name="number">Nombre à vérifier.</param>
         /// <param name="checkType">Type de vérification.</param>
         /// <returns>Vrai si le nombre est valide selon l'algorithme de Luhn, faux sinon.</returns>
         public static bool Check(long number, LuhnCheckType checkType)
         {
-            return Luhn.Check(number.ToString(), checkType);
+            return Check(number.ToString(), checkType);
         }
 
 
         /// <summary>
-        /// Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
+        ///     Utilise l'algorithme de Luhn pour vérifier la validité d'un nombre donné.
         /// </summary>
         /// <param name="number">Nombre à vérifier.</param>
         /// <param name="checkType">Type de vérification.</param>
@@ -135,16 +138,15 @@ namespace Nestor.Tools.Algorithms
             switch (checkType)
             {
                 case LuhnCheckType.CreditCard:
-                    return Luhn.Check(number, 16);
+                    return Check(number, 16);
                 case LuhnCheckType.Siren:
-                    return Luhn.Check(number, 9);
+                    return Check(number, 9);
                 case LuhnCheckType.Siret:
-                    return Luhn.Check(number, 14);
+                    return Check(number, 14);
                 case LuhnCheckType.None:
                 default:
-                    return Luhn.Check(number, -1);
+                    return Check(number, -1);
             }
         }
-
     }
 }

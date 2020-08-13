@@ -6,14 +6,13 @@ namespace Nestor.Tools.Helpers
 {
     public class PhoneticHelper
     {
-
         public static double ToPhonex(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return 0;
 
             // 1. Suppression des caractères spéciaux et passage du résultat en majuscule
-            string text = StringHelper.RemoveDiacritics(input).ToUpper();
+            var text = input.RemoveDiacritics().ToUpper();
 
             // 2. Remplacement des Y par de I
             text = text.Replace('Y', 'I');
@@ -94,17 +93,21 @@ namespace Nestor.Tools.Helpers
             text = Regex.Replace(text, "[T|X]$", string.Empty);
 
             // 16. Affectation à chaque lettre du code numérique correspondant en partant de la dernière lettre
-            List<char> num = new List<char>() { '1', '2', '3', '4', '5', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z' };
-            List<int> r = new List<int>(text.Length);
-            for (int i = 0; i < text.Length; i++)
+            var num = new List<char>
+            {
+                '1', '2', '3', '4', '5', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'N', 'O', 'R', 'S', 'T', 'U', 'W', 'X', 'Y',
+                'Z'
+            };
+            var r = new List<int>(text.Length);
+            for (var i = 0; i < text.Length; i++)
                 r.Add(num.IndexOf(text[i]));
 
             // 17. Conversion des codes numériques ainsi obtenu en un nombre de base 22 exprimé en virgule flottante.
-            double result = 0.0;
-            int j = 1;
+            var result = 0.0;
+            var j = 1;
             foreach (var code in r)
             {
-                result += Math.Pow((double)(code * 22), (double)(-j));
+                result += Math.Pow(code * 22, -j);
                 j += 1;
             }
 

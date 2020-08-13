@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Nestor.Tools.Domain.Abstractions;
-using Nestor.Tools.Infrastructure.EntityFramework.Exceptions;
-using Nestor.Tools.Infrastructure.Abstraction;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Nestor.Tools.Domain.Abstractions;
+using Nestor.Tools.Infrastructure.Abstraction;
+using Nestor.Tools.Infrastructure.EntityFramework.Exceptions;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 {
@@ -16,12 +16,11 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
     {
         public NestorRepository(DbContext dbContext) : base(dbContext)
         {
-
         }
     }
 
     /// <summary>
-    /// Repository de base pour Entity Framework
+    ///     Repository de base pour Entity Framework
     /// </summary>
     /// <typeparam name="TContext">Contexte Entity Framework</typeparam>
     /// <typeparam name="TEntity">Type de l'entité concernée</typeparam>
@@ -29,11 +28,6 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
     public abstract class NestorRepository<TEntity, TId> : IRepository<TEntity, TId>
         where TEntity : class, IEntityWithId<TId>
     {
-        /// <summary>
-        /// Affecte ou obtient le contexte
-        /// </summary>
-        public DbContext Context { get; set; }
-
         //public NestorRepository(IDesignTimeDbContextFactory<DbContext> factory, params string[] args)
         //{
         //    this.Context = factory.CreateDbContext(args) as TContext;
@@ -41,8 +35,13 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 
         public NestorRepository(DbContext context)
         {
-            this.Context = context;
+            Context = context;
         }
+
+        /// <summary>
+        ///     Affecte ou obtient le contexte
+        /// </summary>
+        public DbContext Context { get; set; }
 
         #region Methods
 
@@ -63,7 +62,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         }
 
         /// <summary>
-        /// Attache l'entité passée en paramètre au contexte courant
+        ///     Attache l'entité passée en paramètre au contexte courant
         /// </summary>
         /// <param name="entity"></param>
         public void Attach(TEntity entity)
@@ -72,7 +71,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         }
 
         /// <summary>
-        /// Attache la collection d'entitées passée en paramètre au contexte courant
+        ///     Attache la collection d'entitées passée en paramètre au contexte courant
         /// </summary>
         /// <param name="entity"></param>
         public void Attach(IEnumerable<TEntity> entities)
@@ -91,6 +90,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
             Context.Set<TEntity>().Remove(entity);
             return await Context.SaveChangesAsync();
         }
+
         public void Edit(TEntity entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
@@ -101,26 +101,18 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
             return Context.Set<TEntity>().Where(predicate).ToList();
         }
 
-        public async Task<ICollection<TEntity>> FindByAsync(Expression<Func<TEntity, bool>> predicate, ICollection<string> includes = null, bool noTracking = false)
+        public async Task<ICollection<TEntity>> FindByAsync(Expression<Func<TEntity, bool>> predicate,
+            ICollection<string> includes = null, bool noTracking = false)
         {
             IQueryable<TEntity> context = Context.Set<TEntity>();
             if (includes != null)
-            {
                 foreach (var include in includes)
-                {
                     context = context.Include(include);
-                }
-            }
             if (noTracking)
-            {
                 return await context.Where(predicate).AsNoTracking().ToListAsync();
-            }
-            else
-            {
-                return await context.Where(predicate).ToListAsync();
-            }
-            
+            return await context.Where(predicate).ToListAsync();
         }
+
         public TEntity GetById(TId id)
         {
             return Context.Set<TEntity>().Where(entity => entity.Id.Equals(id)).SingleOrDefault();
@@ -178,14 +170,14 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         //}
 
         /// <summary>
-        /// Obtient une <see cref="TEntity"/> depuis les propriétés qui composent sa clé unique
+        ///     Obtient une <see cref="TEntity" /> depuis les propriétés qui composent sa clé unique
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public abstract Task<TEntity> GetByUniqueKeyAsync(TEntity obj);
 
         /// <summary>
-        /// Obtient une <see cref="TEntity"/> depuis les propriétés qui composent sa clé unique
+        ///     Obtient une <see cref="TEntity" /> depuis les propriétés qui composent sa clé unique
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -220,17 +212,17 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         }
 
         /// <summary>
-        /// Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
+        ///     Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
         /// </summary>
         /// <param name="action">Méthode à executer</param>
         /// <param name="parameter">Paramètres</param>
         public void Execute<T>(Action<T> action, T parameter)
         {
-            Execute<T>(action, parameter);
+            Execute(action, parameter);
         }
 
         /// <summary>
-        /// Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
+        ///     Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
         /// </summary>
         /// <param name="action">Méthode à executer</param>
         /// <param name="parameter">Paramètres</param>
@@ -238,29 +230,30 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         /// <param name="clearSession">Indique la session nHibernate doit être effacée après le traitement</param>
         public void Execute<T>(Action<T> action, T parameter, Action<T> onSuccessAction)
         {
-            Execute<T>(action, parameter, onSuccessAction, null);
+            Execute(action, parameter, onSuccessAction, null);
         }
 
         /// <summary>
-        /// Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
+        ///     Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
         /// </summary>
         /// <param name="action">Méthode à executer</param>
         /// <param name="parameter">Paramètres</param>
         /// <param name="onErrorAction">Méthode à executer en cas d'erreur</param>
         public void Execute<T>(Action<T> action, T parameter, Action<EntityFrameworkException> onErrorAction)
         {
-            Execute<T>(action, parameter, onErrorAction);
+            Execute(action, parameter, onErrorAction);
         }
 
         /// <summary>
-        /// Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
+        ///     Méthode d'execution d'un traitement Entity Framework dans un nouveau contexte de transaction
         /// </summary>
         /// <param name="action">Méthode à executer</param>
         /// <param name="parameter">Paramètres</param>
         /// <param name="onSuccessAction">Méthode à executer en cas de succès</param>
         /// <param name="onErrorAction">Méthode à executer en cas d'erreur</param>
         /// <param name="clearSession">Indique la session nHibernate doit être nettoyée après le traitement</param>
-        public void Execute<T>(Action<T> action, T parameter, Action<T> onSuccessAction, Action<EntityFrameworkException> onErrorAction)
+        public void Execute<T>(Action<T> action, T parameter, Action<T> onSuccessAction,
+            Action<EntityFrameworkException> onErrorAction)
         {
             using (var transaction = Context.Database.BeginTransaction())
             {
@@ -271,7 +264,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 
                     onSuccessAction?.Invoke(parameter);
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     transaction.Rollback();
 
@@ -281,7 +274,8 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         }
 
         /// <summary>
-        /// Effectue un comptage des éléments de type <typeparamref name="TEntity"/>, la clause where sera passée en paramètre grâce à un prédicat
+        ///     Effectue un comptage des éléments de type <typeparamref name="TEntity" />, la clause where sera passée en paramètre
+        ///     grâce à un prédicat
         /// </summary>
         /// <param name="predicate">Prédicat de sélection</param>
         /// <returns>Le nombre d'éléments</returns>
@@ -299,25 +293,25 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         {
             return Context.Set<TEntity>().AsQueryable();
         }
+
         /// <summary>
-        /// Force le rechargement de l'entité passée en paramètre
+        ///     Force le rechargement de l'entité passée en paramètre
         /// </summary>
         /// <param name="entity">entité à recharger</param>
         public async Task ReloadAsync(TEntity entity)
         {
-            await Context.Entry<TEntity>(entity).ReloadAsync();
+            await Context.Entry(entity).ReloadAsync();
         }
+
         /// <summary>
-        /// Force le rechargement des entités passées en paramètre
+        ///     Force le rechargement des entités passées en paramètre
         /// </summary>
         /// <param name="entities">entités à recharger</param>
         public async Task ReloadAsync(IEnumerable<TEntity> entities)
         {
-            foreach (var item in entities)
-            {
-                await ReloadAsync(item);
-            }
+            foreach (var item in entities) await ReloadAsync(item);
         }
+
         #endregion
     }
 }

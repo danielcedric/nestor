@@ -5,10 +5,13 @@ namespace Nestor.Tools.Infrastructure.SqlKata.QueryParameters
     public class WhereQueryParameter
     {
         #region Properties
+
         public List<FilterQueryParameterPart> Filters { get; set; } = new List<FilterQueryParameterPart>();
+
         #endregion
 
         #region Methods
+
         ///// <summary>
         ///// Ajoute un critère de filtrage
         ///// </summary>
@@ -23,7 +26,7 @@ namespace Nestor.Tools.Infrastructure.SqlKata.QueryParameters
         //}
 
         /// <summary>
-        /// Ajoute un critère de filtrage sans opérateur logique (utilisé pour la première insertion)
+        ///     Ajoute un critère de filtrage sans opérateur logique (utilisé pour la première insertion)
         /// </summary>
         /// <param name="logicOperator">Opérateur logique (and|or)</param>
         /// <param name="filter">Critère de filtrage</param>
@@ -32,8 +35,9 @@ namespace Nestor.Tools.Infrastructure.SqlKata.QueryParameters
             //if (Filters.Any())
             //    Filters.Add(new KeyValuePair<LogicOperator?, FilterQueryParameterPart>(LogicOperator.And, filter));
             //else
-                Filters.Add(filter);
+            Filters.Add(filter);
         }
+
         #endregion
     }
 }

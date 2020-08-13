@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Nestor.Tools.Exceptions;
@@ -10,7 +10,7 @@ namespace Nestor.Tools.Helpers
     public static class FileHelper
     {
         /// <summary>
-        /// Méthode qui détecte l'encodage du flux fourni en paramètre.
+        ///     Méthode qui détecte l'encodage du flux fourni en paramètre.
         /// </summary>
         /// <param name="fileStream">Fichier sous forme de flux</param>
         /// <returns>Encodage détecté</returns>
@@ -24,7 +24,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Méthode qui détecte l'encodage du flux fourni en paramètre.
+        ///     Méthode qui détecte l'encodage du flux fourni en paramètre.
         /// </summary>
         /// <param name="fileStream">Chemin du fichier</param>
         /// <returns>Encodage détecté</returns>
@@ -33,12 +33,14 @@ namespace Nestor.Tools.Helpers
             if (!File.Exists(filePath))
                 throw new NestorException("Détection de l'encodage impossible, le fichier spécifié n'existe pas.");
 
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
                 return DetectEncoding(fileStream);
+            }
         }
 
         /// <summary>
-        /// retourne un objet stream du fichier 
+        ///     retourne un objet stream du fichier
         /// </summary>
         /// <param name="fileFullPath">chemin complet du fichier</param>
         /// <returns></returns>
@@ -46,7 +48,7 @@ namespace Nestor.Tools.Helpers
         {
             if (File.Exists(fileFullPath))
                 return File.Open(fileFullPath, FileMode.Open);
-            
+
             return null;
         }
 
@@ -57,13 +59,13 @@ namespace Nestor.Tools.Helpers
 
         public static byte[] StreamFile(this string filename)
         {
-            FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
 
             // Create a byte array of file stream length
-            byte[] ImageData = new byte[fs.Length];
+            var ImageData = new byte[fs.Length];
 
             //Read block of bytes from stream into the byte array
-            fs.Read(ImageData, 0, System.Convert.ToInt32(fs.Length));
+            fs.Read(ImageData, 0, Convert.ToInt32(fs.Length));
 
             //Close the File Stream
             fs.Close();
@@ -71,7 +73,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Supprime un fichier, renvoi false si non réussi
+        ///     Supprime un fichier, renvoi false si non réussi
         /// </summary>
         /// <param name="fileFullPath"></param>
         /// <returns></returns>
@@ -89,28 +91,25 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Retourne un nom de fichier non existant dans le dossier en cours
+        ///     Retourne un nom de fichier non existant dans le dossier en cours
         /// </summary>
         /// <param name="newName">nom du fichier à vérifier</param>
         /// <param name="dir"></param>
         /// <returns></returns>
         public static string GetNewFileName(string newName, DirectoryInfo dir)
         {
-            int existanceIndex = 0;//si la ressource existe on préfixe
+            var existanceIndex = 0; //si la ressource existe on préfixe
 
             if (dir.Exists)
-            {
                 if (dir.GetFiles().Any(f => f.Name.Replace(f.Extension, "") == newName))
                 {
                     //si oui on cherche si elle existe en préfixant avec un nombre, que l'on incrémente au besoin
-                    while (dir.GetFiles().Any(f => f.Name.Replace(f.Extension, "") == String.Format("{0}_{1}", newName, existanceIndex.ToString())))
-                    {
-                        existanceIndex++;
-                    }
+                    while (dir.GetFiles().Any(f =>
+                        f.Name.Replace(f.Extension, "") == string.Format("{0}_{1}", newName, existanceIndex.ToString()))
+                    ) existanceIndex++;
                     //quand on a determiner pour quel valeur le nom est utilisable on le met
-                    newName += String.Format("_{0}", existanceIndex.ToString());
+                    newName += string.Format("_{0}", existanceIndex.ToString());
                 }
-            }
 
             //on retourne le nouveau nom 
             return newName;
@@ -131,9 +130,9 @@ namespace Nestor.Tools.Helpers
                 byHash = md5.ComputeHash(fileToHash);
 
                 // Hash byte[] convertion to hex string
-                string sHashHexString = "";
+                var sHashHexString = "";
 
-                for (int _i = 0; _i < byHash.Length; _i++)
+                for (var _i = 0; _i < byHash.Length; _i++)
                     sHashHexString += byHash[_i].ToString("X2");
 
                 fileToHash.Close();

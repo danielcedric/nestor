@@ -8,44 +8,28 @@ using Nestor.Tools.Helpers;
 namespace Nestor.Tools.Domain.DataAnnotations
 {
     /// <summary>
-    /// Enum qui indique un critère de comparaison entre 2 valeurs
+    ///     Enum qui indique un critère de comparaison entre 2 valeurs
     /// </summary>
     public enum Comparator
     {
-        [Description("=")]
-        EqualTo,
-        [Description("!=")]
-        NotEqualTo,
-        [Description(">")]
-        GreaterThan,
-        [Description("<")]
-        LessThan,
-        [Description(">=")]
-        GreatThanOrEqualTo,
-        [Description("<=")]
-        LessThanOrEqualTo
+        [Description("=")] EqualTo,
+        [Description("!=")] NotEqualTo,
+        [Description(">")] GreaterThan,
+        [Description("<")] LessThan,
+        [Description(">=")] GreatThanOrEqualTo,
+        [Description("<=")] LessThanOrEqualTo
     }
 
     /// <summary>
-    /// http://cncrrnt.com/blog/index.php/2011/01/custom-validationattribute-for-comparing-properties/
+    ///     http://cncrrnt.com/blog/index.php/2011/01/custom-validationattribute-for-comparing-properties/
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
     public class CompareValuesAttribute : ValidationAttribute
     {
-        #region Properties
-        /// <summary>
-        /// Affecte ou obtient l'autre propriété à comparer
-        /// </summary>
-        public string OtherProperty { get; set; }
-        /// <summary>
-        /// Affecte ou obtient le comparateur à appliquer
-        /// </summary>
-        public Comparator Comparator { get; set; }
-        #endregion
-
         #region Constructors
+
         /// <summary>
-        /// Constructeur par défaut
+        ///     Constructeur par défaut
         /// </summary>
         /// <param name="otherProperty">Autre propriété à comparer</param>
         /// <param name="comparator">Comparateur à appliquer</param>
@@ -57,12 +41,15 @@ namespace Nestor.Tools.Domain.DataAnnotations
             OtherProperty = otherProperty;
             Comparator = comparator;
         }
+
         #endregion
 
         /// <summary>
-        /// Détermine si la valeur spécifiée de l'objet est valide. Pour que cela soit le cas, les objets doivent être du même type.
-        /// La présence d'une valeur NULL retourne false, sauf si les 2 valeurs sont nulles.
-        /// Les objets devront mettre en oeuvre IComparable pour les instances GreaterThan, LessThan, GreatThanOrEqualTo et LessThanOrEqualTo
+        ///     Détermine si la valeur spécifiée de l'objet est valide. Pour que cela soit le cas, les objets doivent être du même
+        ///     type.
+        ///     La présence d'une valeur NULL retourne false, sauf si les 2 valeurs sont nulles.
+        ///     Les objets devront mettre en oeuvre IComparable pour les instances GreaterThan, LessThan, GreatThanOrEqualTo et
+        ///     LessThanOrEqualTo
         /// </summary>
         /// <param name="value">La valeur de l'objet à valider</param>
         /// <param name="validationContext">Le contexte de validation</param>
@@ -73,11 +60,13 @@ namespace Nestor.Tools.Domain.DataAnnotations
             var property = validationContext.ObjectType.GetProperty(OtherProperty);
 
             if (property == null)
-                return new ValidationResult(String.Format("Propriété inconnue : {0}.", OtherProperty));
+                return new ValidationResult(string.Format("Propriété inconnue : {0}.", OtherProperty));
 
             // Comparaison des types
-            if (validationContext.ObjectType.GetProperty(validationContext.MemberName).PropertyType != property.PropertyType)
-                return new ValidationResult(String.Format("Les types de {0} et {1} doivent-être identiques.", validationContext.DisplayName, OtherProperty));
+            if (validationContext.ObjectType.GetProperty(validationContext.MemberName).PropertyType !=
+                property.PropertyType)
+                return new ValidationResult(string.Format("Les types de {0} et {1} doivent-être identiques.",
+                    validationContext.DisplayName, OtherProperty));
 
             // Récupération de l'autre valeur
             var other = property.GetValue(validationContext.ObjectInstance, null);
@@ -85,12 +74,12 @@ namespace Nestor.Tools.Domain.DataAnnotations
             // Comparaison
             if (Comparator == Comparator.EqualTo)
             {
-                if (Object.Equals(value, other))
+                if (Equals(value, other))
                     return null;
             }
             else if (Comparator == Comparator.NotEqualTo)
             {
-                if (!Object.Equals(value, other))
+                if (!Equals(value, other))
                     return null;
             }
             else
@@ -100,7 +89,7 @@ namespace Nestor.Tools.Domain.DataAnnotations
                 //    return new ValidationResult(String.Format("{0} et {1} doivent implémenter tous les deux IComparable", validationContext.DisplayName, OtherProperty));
 
                 // Comparaison des objets
-                var result = Comparer<IComparable>.Default.Compare((IComparable)value, (IComparable)other);
+                var result = Comparer<IComparable>.Default.Compare((IComparable) value, (IComparable) other);
 
                 switch (Comparator)
                 {
@@ -128,22 +117,37 @@ namespace Nestor.Tools.Domain.DataAnnotations
         }
 
         /// <summary>
-        /// Applique le formattage du message d'erreur
+        ///     Applique le formattage du message d'erreur
         /// </summary>
         /// <param name="name">The name to include in the error message</param>
         /// <returns></returns>
         public override string FormatErrorMessage(string name)
         {
-            return String.Format(CultureInfo.CurrentCulture, base.ErrorMessageString, name, OtherProperty, Comparator.ToDescription());
+            return string.Format(CultureInfo.CurrentCulture, ErrorMessageString, name, OtherProperty,
+                Comparator.ToDescription());
         }
 
         /// <summary>
-        /// retrieve the object to compare to
+        ///     retrieve the object to compare to
         /// </summary>
         /// <returns></returns>
         private object GetOther(ValidationContext context)
         {
             return null;
         }
+
+        #region Properties
+
+        /// <summary>
+        ///     Affecte ou obtient l'autre propriété à comparer
+        /// </summary>
+        public string OtherProperty { get; set; }
+
+        /// <summary>
+        ///     Affecte ou obtient le comparateur à appliquer
+        /// </summary>
+        public Comparator Comparator { get; set; }
+
+        #endregion
     }
 }

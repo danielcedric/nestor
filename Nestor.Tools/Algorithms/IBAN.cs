@@ -1,16 +1,15 @@
-﻿using Nestor.Tools.Helpers;
-using System;
-using System.Text;
+﻿using System.Text;
+using Nestor.Tools.Helpers;
 
 namespace Nestor.Tools.Algorithms
 {
     /// <summary>
-    /// Vérification d'un numéro IBAN
+    ///     Vérification d'un numéro IBAN
     /// </summary>
     public static class IBAN
     {
         /// <summary>
-        /// Vérifie la validité d'un numéro IBAN
+        ///     Vérifie la validité d'un numéro IBAN
         /// </summary>
         /// <param name="number">Numéro IBAN à vérifier</param>
         /// <returns>true si le numéro est valide, false sinon</returns>
@@ -24,7 +23,7 @@ namespace Nestor.Tools.Algorithms
         }
 
         /// <summary>
-        /// Obtient un numéro IBAN à partir d'un numéro RIB et d'un code de pays
+        ///     Obtient un numéro IBAN à partir d'un numéro RIB et d'un code de pays
         /// </summary>
         /// <param name="rib">Le numéro RIB</param>
         /// <param name="countryCode">Le code du pays (par exemple "FR" pour la France)</param>
@@ -39,19 +38,18 @@ namespace Nestor.Tools.Algorithms
 
         private static string ReplaceLetters(string input)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var c in input)
-            {
-                if (Char.IsDigit(c))
+                if (char.IsDigit(c))
                 {
                     sb.Append(c);
                 }
                 else // lettre majuscule
                 {
-                    int n = c - 'A' + 10;
+                    var n = c - 'A' + 10;
                     sb.Append(n);
                 }
-            }
+
             return sb.ToString();
         }
     }

@@ -20,12 +20,10 @@ namespace Nestor.Tools.Domain.Abstractions
 
     public interface IEntityWithId : IEntityWithId<Guid>
     {
-
     }
 
     public interface IEntityWithCompositeId : IEntity
     {
-
     }
 
     public interface IEntityWithTracking : IEntityWithId<Guid>
@@ -35,6 +33,4 @@ namespace Nestor.Tools.Domain.Abstractions
         DateTime? UpdatedAt { get; set; }
         string UpdatedBy { get; set; }
     }
-
-    
 }

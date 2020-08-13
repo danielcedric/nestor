@@ -5,7 +5,7 @@ namespace Nestor.Tools.Helpers
     public class PhoneHelper
     {
         /// <summary>
-        /// Méthode qui tente d'internationaliser un numéro de téléphone mobile fourni au format 'France métropolitaine'
+        ///     Méthode qui tente d'internationaliser un numéro de téléphone mobile fourni au format 'France métropolitaine'
         /// </summary>
         /// <param name="input">Numéro de téléphone en entrée</param>
         /// <param name="internationalizedMobilePhone">Numéro de téléphone converti au format international</param>
@@ -13,23 +13,23 @@ namespace Nestor.Tools.Helpers
         public static bool TryInternationalizeMobilePhone(string input, out string internationalizedMobilePhone)
         {
             // Nettoyage de la chaine de caractère
-            string cleanInput = input.Replace(" ", string.Empty).Trim();
+            var cleanInput = input.Replace(" ", string.Empty).Trim();
 
             // On teste si l'entrée n'est pas déjà au format internationnal
-            if (RegexHelper.IsMatch(cleanInput, RegexHelper.RegexType.FrenchInternationalMobilePhone))
+            if (cleanInput.IsMatch(RegexHelper.RegexType.FrenchInternationalMobilePhone))
             {
                 internationalizedMobilePhone = cleanInput;
                 return true;
             }
 
-            if (RegexHelper.IsMatch(cleanInput, RegexHelper.RegexType.FrenchMobilePhone))
+            if (cleanInput.IsMatch(RegexHelper.RegexType.FrenchMobilePhone))
             {
                 // L'entrée est au format "France métropolitaine", on va le convertir
                 // En enlevant le premier 0.
                 cleanInput = cleanInput.Substring(1);
                 cleanInput = string.Format("+33{0}", cleanInput);
 
-                if (RegexHelper.IsMatch(cleanInput, RegexHelper.RegexType.FrenchInternationalMobilePhone))
+                if (cleanInput.IsMatch(RegexHelper.RegexType.FrenchInternationalMobilePhone))
                 {
                     internationalizedMobilePhone = cleanInput;
                     return true;
@@ -41,7 +41,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Méthode qui tente d'internationaliser un numéro de téléphone fourni au format 'France métropolitaine'
+        ///     Méthode qui tente d'internationaliser un numéro de téléphone fourni au format 'France métropolitaine'
         /// </summary>
         /// <remarks>Fonctionne aussi pour les numéros de mobile</remarks>
         /// <param name="input">Numéro de téléphone en entrée</param>
@@ -50,23 +50,23 @@ namespace Nestor.Tools.Helpers
         public static bool TryInternationalizeFrenchPhone(string input, out string internationalizedPhone)
         {
             // Nettoyage de la chaine de caractère
-            string cleanInput = PhoneHelper.CleanPhone(input).Trim();
+            var cleanInput = CleanPhone(input).Trim();
 
             // On teste si l'entrée n'est pas déjà au format internationnal
-            if (RegexHelper.IsMatch(cleanInput, RegexHelper.RegexType.FrenchInternationalPhone))
+            if (cleanInput.IsMatch(RegexHelper.RegexType.FrenchInternationalPhone))
             {
                 internationalizedPhone = cleanInput;
                 return true;
             }
 
-            if (RegexHelper.IsMatch(cleanInput, RegexHelper.RegexType.FrenchPhone))
+            if (cleanInput.IsMatch(RegexHelper.RegexType.FrenchPhone))
             {
                 // L'entrée est au format "France métropolitaine", on va le convertir
                 // En enlevant le premier 0.
                 cleanInput = cleanInput.Substring(1);
                 cleanInput = string.Format("+33{0}", cleanInput);
 
-                if (RegexHelper.IsMatch(cleanInput, RegexHelper.RegexType.FrenchInternationalPhone))
+                if (cleanInput.IsMatch(RegexHelper.RegexType.FrenchInternationalPhone))
                 {
                     internationalizedPhone = cleanInput;
                     return true;
@@ -78,46 +78,47 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// retourne un booléen qui indique si le numéro de téléphone est au format mobile Français
+        ///     retourne un booléen qui indique si le numéro de téléphone est au format mobile Français
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool IsFrenchMobilePhone(string input)
         {
-            return RegexHelper.IsMatch(input, RegexHelper.RegexType.FrenchMobilePhone);
+            return input.IsMatch(RegexHelper.RegexType.FrenchMobilePhone);
         }
+
         /// <summary>
-        /// Retourne un booléen qui indique si le numéro de téléphone est au format Français.
+        ///     Retourne un booléen qui indique si le numéro de téléphone est au format Français.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool IsFrenchPhone(string input)
         {
-            return RegexHelper.IsMatch(input, RegexHelper.RegexType.FrenchPhone);
+            return input.IsMatch(RegexHelper.RegexType.FrenchPhone);
         }
 
         /// <summary>
-        /// retourne un booléen qui indique si le numéro de téléphone est au format mobile international Français (+33)
+        ///     retourne un booléen qui indique si le numéro de téléphone est au format mobile international Français (+33)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool IsFrenchInternationalMobilePhone(string input)
         {
-            return RegexHelper.IsMatch(input, RegexHelper.RegexType.FrenchInternationalMobilePhone);
+            return input.IsMatch(RegexHelper.RegexType.FrenchInternationalMobilePhone);
         }
 
         /// <summary>
-        /// retourne un booléen qui indique si le numéro de téléphone est au format international Français (+33)
+        ///     retourne un booléen qui indique si le numéro de téléphone est au format international Français (+33)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static bool IsFrenchInternationalPhone(string input)
         {
-            return RegexHelper.IsMatch(input, RegexHelper.RegexType.FrenchInternationalPhone);
+            return input.IsMatch(RegexHelper.RegexType.FrenchInternationalPhone);
         }
 
         /// <summary>
-        /// Méthode qui nettoie le numéro de téléphone passé en paramètre (suppression des ' ', '-', ...)
+        ///     Méthode qui nettoie le numéro de téléphone passé en paramètre (suppression des ' ', '-', ...)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -138,7 +139,7 @@ namespace Nestor.Tools.Helpers
 
             if (input.Length == 10 && input[0] == '0')
                 return input;
-            else if (input.Length == 9)
+            if (input.Length == 9)
                 return string.Format("0{0}", input);
 
             if (input.StartsWith("+33"))
@@ -151,7 +152,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Formate un numéro de téléphone selon le séparateur fourni
+        ///     Formate un numéro de téléphone selon le séparateur fourni
         /// </summary>
         /// <param name="input">Numéro de téléphone à mettre en forme</param>
         /// <param name="separator">séparateur, par défaut l'espace</param>

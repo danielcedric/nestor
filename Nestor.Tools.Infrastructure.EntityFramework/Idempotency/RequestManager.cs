@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nestor.Tools.Exceptions;
 using Nestor.Tools.Infrastructure.Idempotency;
-using System;
-using System.Threading.Tasks;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Idempotency
 {
-    public class RequestManager<TContext> : IRequestManager 
+    public class RequestManager<TContext> : IRequestManager
         where TContext : DbContext
     {
         private readonly TContext _context;
@@ -15,7 +15,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Idempotency
         {
             _context = context ?? throw new ArgumentNullException(nameof(TContext));
         }
-        
+
         public async Task<bool> ExistAsync(Guid id)
         {
             var request = await _context.FindAsync<ClientRequest>(id);
@@ -26,9 +26,9 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Idempotency
         {
             var exists = await ExistAsync(id);
 
-            var request = exists ?
-                throw new NestorException($"La requête portant l'id {id} existe déjà") :
-                new ClientRequest()
+            var request = exists
+                ? throw new NestorException($"La requête portant l'id {id} existe déjà")
+                : new ClientRequest
                 {
                     Id = id,
                     Name = typeof(T).Name,

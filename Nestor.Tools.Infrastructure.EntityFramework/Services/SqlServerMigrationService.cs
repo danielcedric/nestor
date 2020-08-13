@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Nestor.Tools.Exceptions;
 using Nestor.Tools.Infrastructure.EntityFramework.Models;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Services
 {
@@ -15,22 +16,22 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
     {
         public SqlServerMigrationService() : base("Microsoft.EntityFrameworkCore.SqlServer")
         {
-
         }
 
 
         #region Methods
+
         /// <summary>
-        /// Teste si la table existe
+        ///     Teste si la table existe
         /// </summary>
         /// <param name="database">Base de données</param>
         /// <param name="table">Nom de la table</param>
         /// <param name="schema">Schéma</param>
         /// <returns></returns>
-        public override async Task<bool> CheckIfTableExists(DbContext context, string table, string schema = "dbo", bool closeConnection = true)
+        public override async Task<bool> CheckIfTableExists(DbContext context, string table, string schema = "dbo",
+            bool closeConnection = true)
         {
             if (context.Database.IsSqlServer())
-            {
                 using (var connection = context.Database.GetDbConnection())
                 {
                     using (var cmd = connection.CreateCommand())
@@ -49,26 +50,26 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                             hasRows = result.HasRows;
                         }
 
-                        if (connection.State == System.Data.ConnectionState.Open && closeConnection)
+                        if (connection.State == ConnectionState.Open && closeConnection)
                             context.Database.CloseConnection();
 
                         return hasRows;
                     }
                 }
-            }
-            else
-                throw new NestorException("The database is not a SQL Server Database");
+
+            throw new NestorException("The database is not a SQL Server Database");
         }
 
         /// <summary>
-        /// Créé une nouvelle colonne en base de données
+        ///     Créé une nouvelle colonne en base de données
         /// </summary>
         /// <param name="database">Base de données</param>
         /// <param name="tableName">Nom de la table à créer</param>
         /// <param name="schema">Schéma auquel il faut rattacher la table</param>
         /// <param name="updateDatabase">Si vrai, met à jour la base de données</param>
         /// <returns></returns>
-        public override async Task<IEnumerable<DbOperationResult>> CreateTableAsync(DbContext context, string tableName, string schema = "dbo", bool updateDatabase = true)
+        public override async Task<IEnumerable<DbOperationResult>> CreateTableAsync(DbContext context, string tableName,
+            string schema = "dbo", bool updateDatabase = true)
         {
             if (context.Database.IsSqlServer())
             {
@@ -76,30 +77,31 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                     MigrationBuilder.EnsureSchema(schema);
 
                 // Création de la table 
-                var newTable = new CreateTableOperation() { Name = tableName, Schema = schema };
+                var newTable = new CreateTableOperation {Name = tableName, Schema = schema};
 
                 // Ajout d'une clé primaire
-                var idColumn = new AddColumnOperation() { Name = "Id", ClrType = typeof(long), IsNullable = false, Table = tableName, Schema = schema };
-                idColumn.AddAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                var idColumn = new AddColumnOperation
+                    {Name = "Id", ClrType = typeof(long), IsNullable = false, Table = tableName, Schema = schema};
+                idColumn.AddAnnotation("SqlServer:ValueGenerationStrategy",
+                    SqlServerValueGenerationStrategy.IdentityColumn);
                 newTable.Columns.Add(idColumn);
 
-                newTable.PrimaryKey = new AddPrimaryKeyOperation() { Columns = new[] { "Id" }, Name = $"PK_{tableName}" };
+                newTable.PrimaryKey = new AddPrimaryKeyOperation {Columns = new[] {"Id"}, Name = $"PK_{tableName}"};
                 return await ComputeResultAsync(context, newTable, updateDatabase);
             }
-            else
-                throw new NestorException("The database is not a SQL Server Database");
 
-
+            throw new NestorException("The database is not a SQL Server Database");
         }
 
         /// <summary>
-        /// Obtient les colonnes présentes dans la table
+        ///     Obtient les colonnes présentes dans la table
         /// </summary>
         /// <param name="context">Contexte de la base de données</param>
         /// <param name="table">Nom de la table</param>
         /// <param name="schema">Nom du schéma</param>
         /// <returns></returns>
-        public override async Task<IEnumerable<string>> GetColumnsAsync(DbContext context, string table, string schema = "dbo", bool closeConnection = true)
+        public override async Task<IEnumerable<string>> GetColumnsAsync(DbContext context, string table,
+            string schema = "dbo", bool closeConnection = true)
         {
             using (var connection = context.Database.GetDbConnection())
             {
@@ -112,20 +114,17 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                         .Append("FROM sys.columns ")
                         .Append($"WHERE Object_ID = Object_ID('[{schema}].[{table}]')").ToString();
 
-                    if (connection.State == System.Data.ConnectionState.Closed)
+                    if (connection.State == ConnectionState.Closed)
                         await connection.OpenAsync();
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         if (reader.HasRows)
-                        {
                             while (await reader.ReadAsync())
                                 columns.Add(reader.GetString(0));
-                        }
-
                     }
 
-                    if (connection.State == System.Data.ConnectionState.Open && closeConnection)
+                    if (connection.State == ConnectionState.Open && closeConnection)
                         connection.Close();
 
                     return columns;
@@ -134,22 +133,22 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
         }
 
         /// <summary>
-        /// Teste si la colonne existe déjà dans la table
+        ///     Teste si la colonne existe déjà dans la table
         /// </summary>
         /// <param name="database">Base de données</param>
         /// <param name="table">Nom de la table</param>
         /// <param name="column">Nom de la colone</param>
         /// <param name="schema">Schéma</param>
         /// <returns></returns>
-        public override async Task<bool> CheckIfColumnExistsInTable(DbContext context, string table, string column, string schema = "dbo", bool closeConnection = true)
+        public override async Task<bool> CheckIfColumnExistsInTable(DbContext context, string table, string column,
+            string schema = "dbo", bool closeConnection = true)
         {
             if (context.Database.IsSqlServer())
-            {
                 using (var connection = context.Database.GetDbConnection())
                 {
                     using (var cmd = connection.CreateCommand())
                     {
-                        bool hasRows = false;
+                        var hasRows = false;
 
                         cmd.CommandText = new StringBuilder()
                             .Append("SELECT Name ")
@@ -157,7 +156,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                             .Append($"WHERE Name = '{column}' ")
                             .Append($"AND Object_ID = Object_ID('[{schema}].{table}')").ToString();
 
-                        if (connection.State == System.Data.ConnectionState.Closed)
+                        if (connection.State == ConnectionState.Closed)
                             await context.Database.OpenConnectionAsync();
 
                         using (var result = await cmd.ExecuteReaderAsync())
@@ -165,25 +164,25 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                             hasRows = result.HasRows;
                         }
 
-                        if (connection.State == System.Data.ConnectionState.Open && closeConnection)
+                        if (connection.State == ConnectionState.Open && closeConnection)
                             context.Database.CloseConnection();
                         return hasRows;
                     }
                 }
-            }
-            else
-                throw new NestorException("The database is not a SQL Server Database");
+
+            throw new NestorException("The database is not a SQL Server Database");
         }
 
         /// <summary>
-        /// Teste si la colonne existe déjà dans la table
+        ///     Teste si la colonne existe déjà dans la table
         /// </summary>
         /// <param name="database">Base de données</param>
         /// <param name="table">Nom de la table</param>
         /// <param name="column">Nom de la colone</param>
         /// <param name="schema">Schéma</param>
         /// <returns></returns>
-        public override async Task<ForeignKeyDescription> GetForeignKeyDescription(DbContext context, string constraintName, bool closeConnection = true)
+        public override async Task<ForeignKeyDescription> GetForeignKeyDescription(DbContext context,
+            string constraintName, bool closeConnection = true)
         {
             if (context.Database.IsSqlServer())
             {
@@ -198,7 +197,8 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                         .Append(", OBJECT_NAME(f.parent_object_id) AS table_name")
                         .Append(", COL_NAME(fc.parent_object_id, fc.parent_column_id) AS constraint_column_name")
                         .Append(", OBJECT_NAME (f.referenced_object_id) AS referenced_table")
-                        .Append(", COL_NAME(fc.referenced_object_id, fc.referenced_column_id) AS referenced_column_name")
+                        .Append(
+                            ", COL_NAME(fc.referenced_object_id, fc.referenced_column_id) AS referenced_column_name")
                         .Append(", is_disabled")
                         .Append(", delete_referential_action_desc")
                         .Append(", update_referential_action_desc")
@@ -207,38 +207,15 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                         .Append(" ON f.object_id = fc.constraint_object_id")
                         .Append($" WHERE f.name = '{constraintName}'").ToString();
 
-                    if (connection.State == System.Data.ConnectionState.Closed)
+                    if (connection.State == ConnectionState.Closed)
                         await context.Database.OpenConnectionAsync();
 
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         if (reader.HasRows)
-                        {
                             while (await reader.ReadAsync())
                             {
-                                var onUpdateAction = ReferentialAction.NoAction;
-                                switch (reader.GetString(6))
-                                {
-                                    case "CASCADE":
-                                        onUpdateAction = ReferentialAction.Cascade;
-                                        break;
-                                    case "RESTRICT":
-                                        onUpdateAction = ReferentialAction.Restrict;
-                                        break;
-                                    case "SET_NULL":
-                                        onUpdateAction = ReferentialAction.SetNull;
-                                        break;
-                                    case "SET_DEFAULT":
-                                        onUpdateAction = ReferentialAction.SetNull;
-                                        break;
-                                    case "NO_ACTION":
-                                    default:
-                                        onUpdateAction = ReferentialAction.NoAction;
-                                        break;
-                                }
-
-
                                 fkConstraintDesc.ConstraintName = reader.GetString(0);
                                 fkConstraintDesc.TableName = reader.GetString(1);
                                 fkConstraintDesc.ConstraintColumnName = reader.GetString(2);
@@ -249,20 +226,19 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                                 fkConstraintDesc.OnUpdateAction = ConvertToReferentialAction(reader.GetString(7));
                                 break;
                             }
-                        }
                     }
 
-                    if (connection.State == System.Data.ConnectionState.Open && closeConnection)
+                    if (connection.State == ConnectionState.Open && closeConnection)
                         context.Database.CloseConnection();
                     return fkConstraintDesc;
                 }
             }
-            else
-                throw new NestorException("The database is not a SQL Server Database");
+
+            throw new NestorException("The database is not a SQL Server Database");
         }
 
         /// <summary>
-        /// Converti une chaine de caractères en <see cref="ReferentialAction"/>
+        ///     Converti une chaine de caractères en <see cref="ReferentialAction" />
         /// </summary>
         /// <param name="action">Valeur à convertir</param>
         /// <returns></returns>
@@ -293,14 +269,15 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
         }
 
         /// <summary>
-        /// retourne vrai si l'index existe dans la table indiquée
+        ///     retourne vrai si l'index existe dans la table indiquée
         /// </summary>
         /// <param name="context">Contexte de la base de données</param>
         /// <param name="indexName">Nom de l'index</param>
         /// <param name="table">Nom de la table</param>
         /// <param name="schema">Nom du schéma</param>
         /// <returns></returns>
-        public override async Task<bool> CheckIfIndexExistsAsync(DbContext context, DbTransaction transaction, string indexName, string table, string schema = "dbo", bool closeConnection = true)
+        public override async Task<bool> CheckIfIndexExistsAsync(DbContext context, DbTransaction transaction,
+            string indexName, string table, string schema = "dbo", bool closeConnection = true)
         {
             if (context.Database.IsSqlServer())
             {
@@ -308,7 +285,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
 
                 using (var cmd = connection.CreateCommand())
                 {
-                    bool hasRows = false;
+                    var hasRows = false;
                     cmd.Transaction = transaction;
                     cmd.CommandText = new StringBuilder()
                         .Append("SELECT si.Name ")
@@ -319,7 +296,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                         .Append($"AND so.Name = '{table}' ")
                         .Append($"AND si.Name = '{indexName}'").ToString();
 
-                    if (connection.State == System.Data.ConnectionState.Closed)
+                    if (connection.State == ConnectionState.Closed)
                         await context.Database.OpenConnectionAsync();
 
                     using (var result = await cmd.ExecuteReaderAsync())
@@ -327,14 +304,15 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Services
                         hasRows = result.HasRows;
                     }
 
-                    if (connection.State == System.Data.ConnectionState.Open && closeConnection)
+                    if (connection.State == ConnectionState.Open && closeConnection)
                         context.Database.CloseConnection();
                     return hasRows;
                 }
             }
-            else
-                throw new NestorException("The database is not a SQL Server Database");
+
+            throw new NestorException("The database is not a SQL Server Database");
         }
+
         #endregion
     }
 }

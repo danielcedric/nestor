@@ -3,6 +3,6 @@
     public enum LogicOperator
     {
         And,
-        Or        
+        Or
     }
 }

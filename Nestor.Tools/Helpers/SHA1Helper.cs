@@ -7,14 +7,11 @@ namespace Nestor.Tools.Helpers
     {
         public static string Hash(string input)
         {
-            SHA1 sha = SHA1.Create();
-            byte[] bHash = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
-            StringBuilder sBuilder = new StringBuilder();
+            var sha = SHA1.Create();
+            var bHash = sha.ComputeHash(Encoding.UTF8.GetBytes(input));
+            var sBuilder = new StringBuilder();
 
-            for (int i = 0; i < bHash.Length; i++)
-            {
-                sBuilder.Append(bHash[i].ToString("x2"));
-            }
+            for (var i = 0; i < bHash.Length; i++) sBuilder.Append(bHash[i].ToString("x2"));
 
             return sBuilder.ToString();
         }

@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using System;
+﻿using System;
+using Microsoft.Extensions.Options;
 
 namespace Nestor.Tools.Infrastructure.Abstraction
 {
@@ -7,5 +7,4 @@ namespace Nestor.Tools.Infrastructure.Abstraction
     {
         void Update(Action<T> applyChanges);
     }
-
 }

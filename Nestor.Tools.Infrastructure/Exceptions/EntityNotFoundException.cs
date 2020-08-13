@@ -7,12 +7,11 @@ namespace Nestor.Tools.Infrastructure.Exceptions
     {
         public EntityNotFoundException()
         {
-
         }
 
-        public EntityNotFoundException(long id) : base($"Unable to find an entity of type {typeof(TEntity).Name} corresponding to the identifier {id}.")
+        public EntityNotFoundException(long id) : base(
+            $"Unable to find an entity of type {typeof(TEntity).Name} corresponding to the identifier {id}.")
         {
-
         }
     }
 }

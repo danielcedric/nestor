@@ -6,8 +6,6 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Exceptions
     {
         public OutsideTransactionalContext() : base("You must be in transactional context")
         {
-
         }
     }
-    
 }

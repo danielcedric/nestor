@@ -2,7 +2,8 @@
 {
     public class MaxLengthCantBeLessThanLengthOfEllipsisStringException : NestorException
     {
-        public MaxLengthCantBeLessThanLengthOfEllipsisStringException() : base("maxLength can not be less than the length of ellipsisString")
+        public MaxLengthCantBeLessThanLengthOfEllipsisStringException() : base(
+            "maxLength can not be less than the length of ellipsisString")
         {
         }
     }

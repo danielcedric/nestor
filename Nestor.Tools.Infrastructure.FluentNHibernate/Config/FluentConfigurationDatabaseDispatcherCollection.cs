@@ -4,27 +4,33 @@ using System.Configuration;
 namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
 {
     [ConfigurationCollection(typeof(FluentConfigurationDatabaseDispatcherElement))]
-    public class FluentConfigurationDatabaseDispatcherCollection : ConfigurationElementCollection, IList<FluentConfigurationDatabaseDispatcherElement>
+    public class FluentConfigurationDatabaseDispatcherCollection : ConfigurationElementCollection,
+        IList<FluentConfigurationDatabaseDispatcherElement>
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         public FluentConfigurationDatabaseDispatcherElement this[int index]
         {
-            get
-            {
-                return base.BaseGet(index) as FluentConfigurationDatabaseDispatcherElement;
-            }
+            get => BaseGet(index) as FluentConfigurationDatabaseDispatcherElement;
             set
             {
-                if (base.BaseGet(index) != null)
-                    base.BaseRemoveAt(index);
+                if (BaseGet(index) != null)
+                    BaseRemoveAt(index);
 
-                this.BaseAdd(index, value);
+                BaseAdd(index, value);
             }
         }
+
+        #region IEnumerable<FluentConfigurationDatabaseDispatcherElement> Membres
+
+        public new IEnumerator<FluentConfigurationDatabaseDispatcherElement> GetEnumerator()
+        {
+            for (var i = 0; i < Count; i++) yield return BaseGet(i) as FluentConfigurationDatabaseDispatcherElement;
+        }
+
+        #endregion
 
         protected override ConfigurationElement CreateNewElement()
         {
@@ -33,7 +39,7 @@ namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((FluentConfigurationDatabaseDispatcherElement)element).ConnectionStringName;
+            return ((FluentConfigurationDatabaseDispatcherElement) element).ConnectionStringName;
         }
 
         #region IList<FluentConfigurationDatabaseDispatcherElement> Membres
@@ -77,29 +83,12 @@ namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
             base.CopyTo(array, arrayIndex);
         }
 
-        public new bool IsReadOnly
-        {
-            get { return IsReadOnly; }
-        }
+        public new bool IsReadOnly => IsReadOnly;
 
         public bool Remove(FluentConfigurationDatabaseDispatcherElement item)
         {
             BaseRemove(GetElementKey(item));
             return true;
-        }
-
-        #endregion
-
-        #region IEnumerable<FluentConfigurationDatabaseDispatcherElement> Membres
-
-        public new IEnumerator<FluentConfigurationDatabaseDispatcherElement> GetEnumerator()
-        {
-            for (int i = 0; i < base.Count; i++)
-            {
-                yield return base.BaseGet(i) as FluentConfigurationDatabaseDispatcherElement;
-            }
-
-            yield break;
         }
 
         #endregion

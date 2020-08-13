@@ -1,8 +1,7 @@
-﻿
-
-/// <summary>
+﻿/// <summary>
 /// Source : http://blog.soat.fr/2012/02/simplifier-lecriture-de-inotifypropertychanged-en-c/
 /// </summary>
+
 namespace Nestor.Tools.Domain.DataAnnotations
 {
     //[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]

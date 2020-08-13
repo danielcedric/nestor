@@ -5,13 +5,10 @@ namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
     public class FluentConfigurationDatabaseDispatcherElement : ConfigurationElement
     {
         /// <summary>
-        /// Obtient le nom de la clé de la chaine de connexion à la base de données
+        ///     Obtient le nom de la clé de la chaine de connexion à la base de données
         /// </summary>
         [ConfigurationProperty("connectionStringName", IsRequired = true)]
-        public string ConnectionStringName
-        {
-            get { return this["connectionStringName"] as string; }
-        }
+        public string ConnectionStringName => this["connectionStringName"] as string;
 
         ///// <summary>
         ///// Obtient le type de base de données
@@ -52,13 +49,11 @@ namespace Nestor.Tools.Infrastructure.FluentNHibernate.Config
         //}
 
         /// <summary>
-        /// Retourne les assemblies pour chaque configuration
+        ///     Retourne les assemblies pour chaque configuration
         /// </summary>
         [ConfigurationProperty("assemblies")]
         [ConfigurationCollection(typeof(FluentConfigurationAssemblyElement), AddItemName = "assembly")]
-        public FluentConfigurationAssemblyCollection Assemblies
-        {
-            get { return this["assemblies"] as FluentConfigurationAssemblyCollection; }
-        }
+        public FluentConfigurationAssemblyCollection Assemblies =>
+            this["assemblies"] as FluentConfigurationAssemblyCollection;
     }
 }

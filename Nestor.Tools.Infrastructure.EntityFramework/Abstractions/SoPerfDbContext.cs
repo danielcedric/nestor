@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 {
@@ -27,12 +27,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 
     public class NestorDbContext : DbContext
     {
-        static NestorDbContext()
-        {
-
-        }
-
-        protected NestorDbContext() : base()
+        protected NestorDbContext()
         {
             Database.Migrate();
         }
@@ -47,11 +42,10 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
             base.OnModelCreating(modelBuilder);
 
             var s = GetAllMaps();
-
         }
 
         /// <summary>
-        /// Obtient toutes les classes qui sont déclarées comme étant des maps
+        ///     Obtient toutes les classes qui sont déclarées comme étant des maps
         /// </summary>
         /// <returns></returns>
         protected IEnumerable<string> GetAllMaps()

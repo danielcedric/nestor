@@ -10,17 +10,17 @@ namespace Nestor.Tools.Helpers
 {
     public static class StringHelper
     {
-        private static Regex wordRegex = new Regex(@"\p{Lu}\p{Ll}+|\p{Lu}+(?!\p{Ll})|\p{Ll}+|\d+");
+        private static readonly Regex wordRegex = new Regex(@"\p{Lu}\p{Ll}+|\p{Lu}+(?!\p{Ll})|\p{Ll}+|\d+");
 
         /// <summary>
-        /// Remplace dans la chaine de caractère passée en entrée les caractères du tableau passé en entrée
+        ///     Remplace dans la chaine de caractère passée en entrée les caractères du tableau passé en entrée
         /// </summary>
         /// <param name="input">Chaine à nettoyer</param>
         /// <param name="charsToRemove">Tableau contenant les caractères à nettoyer</param>
         /// <returns></returns>
         public static string Remove(this string input, char[] charsToRemove)
         {
-            string cleanString = input;
+            var cleanString = input;
 
             foreach (var c in charsToRemove)
                 cleanString = cleanString.Replace(c.ToString(), string.Empty);
@@ -29,7 +29,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Méthode qui indique si une valeur passée en paramètre et de type numérique
+        ///     Méthode qui indique si une valeur passée en paramètre et de type numérique
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -39,7 +39,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Transforme une chaine de caractère passée en paramètre en chaine à la casse "Pascal"
+        ///     Transforme une chaine de caractère passée en paramètre en chaine à la casse "Pascal"
         /// </summary>
         /// <param name="input">chaine de caractère</param>
         /// <returns></returns>
@@ -49,13 +49,13 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Transforme la chaine de caractères passée au format CamelCase
+        ///     Transforme la chaine de caractères passée au format CamelCase
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static string ToCamelCase(this string input)
         {
-            string pascal = ToPascalCase(input);
+            var pascal = ToPascalCase(input);
             return wordRegex.Replace(pascal, EvaluateFirstCamel, 1);
         }
 
@@ -65,64 +65,58 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="match"></param>
         /// <returns></returns>
         private static string EvaluatePascal(Match match)
         {
-            string value = match.Value;
-            int valueLength = value.Length;
+            var value = match.Value;
+            var valueLength = value.Length;
 
-            if (valueLength == 1)
-                return value.ToUpper();
-            else
-            {
-                if (valueLength <= 2 && IsWordUpper(value))
-                    return value;
-                else
-                    return value.Substring(0, 1).ToUpper() + value.Substring(1, valueLength - 1).ToLower();
-            }
+            if (valueLength == 1) return value.ToUpper();
+
+            if (valueLength <= 2 && IsWordUpper(value))
+                return value;
+            return value.Substring(0, 1).ToUpper() + value.Substring(1, valueLength - 1).ToLower();
         }
 
         /// <summary>
-        /// Indique si la chaine de caractère 
+        ///     Indique si la chaine de caractère
         /// </summary>
         /// <param name="word"></param>
         /// <returns></returns>
         private static bool IsWordUpper(string word)
         {
-            bool result = true;
+            var result = true;
 
-            foreach (char c in word)
-            {
-                if (Char.IsLower(c))
+            foreach (var c in word)
+                if (char.IsLower(c))
                 {
                     result = false;
                     break;
                 }
-            }
 
             return result;
         }
 
         /// <summary>
-        /// Retire les espaces en trop d'une chaine de caratères 
+        ///     Retire les espaces en trop d'une chaine de caratères
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
         public static string RemoveMultipleSpaces(this string input)
         {
-            return RegexHelper.Replace(input, RegexHelper.RegexType.MultipleSpaces, " ");
+            return input.Replace(RegexHelper.RegexType.MultipleSpaces, " ");
         }
 
         public static string Titleize(this string text)
         {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text).ToSentenceCase().ReplaceSpecialCharactersBySpace();
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text).ToSentenceCase()
+                .ReplaceSpecialCharactersBySpace();
         }
 
         /// <summary>
-        /// Remplace la première lettre d'un mot par une majuscule, le reste en minuscule
+        ///     Remplace la première lettre d'un mot par une majuscule, le reste en minuscule
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -146,12 +140,11 @@ namespace Nestor.Tools.Helpers
         {
             if (str.Length <= nbChar)
                 return str;
-            else
-                return str.Substring(0, nbChar);
+            return str.Substring(0, nbChar);
         }
 
         /// <summary>
-        /// Remplace tous les caractères spéciaux par un tiret
+        ///     Remplace tous les caractères spéciaux par un tiret
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -162,11 +155,10 @@ namespace Nestor.Tools.Helpers
 
         public static string NormalizeStringForUrl(string name, char replace = '-')
         {
-            String normalizedString = name.Normalize(NormalizationForm.FormD);
-            StringBuilder stringBuilder = new StringBuilder(name.Length);
+            var normalizedString = name.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder(name.Length);
 
-            foreach (char c in normalizedString)
-            {
+            foreach (var c in normalizedString)
                 switch (CharUnicodeInfo.GetUnicodeCategory(c))
                 {
                     case UnicodeCategory.LowercaseLetter:
@@ -180,14 +172,14 @@ namespace Nestor.Tools.Helpers
                         stringBuilder.Append(replace);
                         break;
                 }
-            }
-            string result = stringBuilder.ToString();
-            return String.Join(replace.ToString(), result.Split(new char[] { replace }
+
+            var result = stringBuilder.ToString();
+            return string.Join(replace.ToString(), result.Split(new[] {replace}
                 , StringSplitOptions.RemoveEmptyEntries)).ToLower(); // remove duplicate dash
         }
 
         /// <summary>
-        /// Méthode qui supprime les caractères accentués d'une chaine de caractères
+        ///     Méthode qui supprime les caractères accentués d'une chaine de caractères
         /// </summary>
         /// <param name="text">Entrée</param>
         /// <returns></returns>
@@ -199,17 +191,14 @@ namespace Nestor.Tools.Helpers
             foreach (var c in normalizedString)
             {
                 var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
-                {
-                    stringBuilder.Append(c);
-                }
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark) stringBuilder.Append(c);
             }
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
         /// <summary>
-        /// Obtient une chaine de caractère aléatoire
+        ///     Obtient une chaine de caractère aléatoire
         /// </summary>
         /// <param name="maxLength">Longueur maximale</param>
         /// <returns></returns>
@@ -219,9 +208,8 @@ namespace Nestor.Tools.Helpers
         }
 
 
-
         /// <summary>
-        /// Obtient une chaine de caractère aléatoire
+        ///     Obtient une chaine de caractère aléatoire
         /// </summary>
         /// <param name="maxLength">Longueur maximale</param>
         /// <returns></returns>
@@ -231,7 +219,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Transforme la première lettre en majuscule
+        ///     Transforme la première lettre en majuscule
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -247,30 +235,28 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Génère une chaine aléatoire à partir d'un tableau de charactères et d'une longueur max
+        ///     Génère une chaine aléatoire à partir d'un tableau de charactères et d'une longueur max
         /// </summary>
         /// <param name="availableChars">Tableau des caractères disponibles</param>
         /// <param name="maxLength">Longueur attendue de la chaine</param>
         /// <returns></returns>
         private static string GenerateRandomString(char[] availableChars, int maxLength)
         {
-            byte[] data = new byte[1];
-            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            var data = new byte[1];
+            using (var crypto = new RNGCryptoServiceProvider())
             {
                 crypto.GetNonZeroBytes(data);
                 data = new byte[maxLength];
                 crypto.GetNonZeroBytes(data);
             }
-            StringBuilder result = new StringBuilder(maxLength);
-            foreach (byte b in data)
-            {
-                result.Append(availableChars[b % (availableChars.Length)]);
-            }
+
+            var result = new StringBuilder(maxLength);
+            foreach (var b in data) result.Append(availableChars[b % availableChars.Length]);
             return result.ToString();
         }
 
         /// <summary>
-        /// Converti une chaine du type 12312312312345 au format siret 123 123 123 12345
+        ///     Converti une chaine du type 12312312312345 au format siret 123 123 123 12345
         /// </summary>
         /// <param name="helper"></param>
         /// <returns></returns>
@@ -279,18 +265,20 @@ namespace Nestor.Tools.Helpers
             string siret;
             try
             {
-                siret = Regex.Replace(helper, "(?<first>([0-9]{3}))(?<second>([0-9]{3}))(?<third>([0-9]{3}))(?<fourth>([0-9]{5}))",
+                siret = Regex.Replace(helper,
+                    "(?<first>([0-9]{3}))(?<second>([0-9]{3}))(?<third>([0-9]{3}))(?<fourth>([0-9]{5}))",
                     "${first} ${second} ${third} ${fourth}");
             }
             catch (ArgumentException)
             {
                 siret = helper;
             }
+
             return siret;
         }
 
         /// <summary>
-        /// Retourne une chaîne contenant un nombre spécifié de caractères en partant de la gauche d'une chaîne.
+        ///     Retourne une chaîne contenant un nombre spécifié de caractères en partant de la gauche d'une chaîne.
         /// </summary>
         /// <param name="s">chaine dont les caractères situés le plus à gauche sont retournés</param>
         /// <param name="count">Nombre de caractères à retourner</param>
@@ -303,7 +291,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Retourne une chaîne contenant un nombre spécifié de caractères en partant de la droite d'une chaîne.
+        ///     Retourne une chaîne contenant un nombre spécifié de caractères en partant de la droite d'une chaîne.
         /// </summary>
         /// <param name="s">chaine dont les caractères situés le plus à droite sont retournés</param>
         /// <param name="count">Nombre de caractères à retourner</param>
@@ -316,13 +304,13 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Converti une chaine sécurisé en chaine non sécurisée
+        ///     Converti une chaine sécurisé en chaine non sécurisée
         /// </summary>
         /// <param name="secureString"></param>
         /// <returns></returns>
         public static string ConvertToUnSecureString(this SecureString secureString)
         {
-            IntPtr unmanagedString = IntPtr.Zero;
+            var unmanagedString = IntPtr.Zero;
             try
             {
                 unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(secureString);
@@ -335,7 +323,7 @@ namespace Nestor.Tools.Helpers
         }
 
         /// <summary>
-        /// Converti une chaine de caractère en chaine sécurisée
+        ///     Converti une chaine de caractère en chaine sécurisée
         /// </summary>
         /// <param name="strPassword"></param>
         /// <returns></returns>
@@ -343,9 +331,8 @@ namespace Nestor.Tools.Helpers
         {
             var secureStr = new SecureString();
             if (strPassword.Length > 0)
-            {
-                foreach (var c in strPassword.ToCharArray()) secureStr.AppendChar(c);
-            }
+                foreach (var c in strPassword.ToCharArray())
+                    secureStr.AppendChar(c);
             return secureStr;
         }
 

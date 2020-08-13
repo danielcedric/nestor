@@ -5,50 +5,41 @@ namespace Nestor.Tools.Helpers
     public class LevenshteinHelper
     {
         /// <summary>
-        /// Calcule une distance selon l'algorithme de Levenshtein
+        ///     Calcule une distance selon l'algorithme de Levenshtein
         /// </summary>
         /// <param name="sRow"></param>
         /// <param name="sCol"></param>
         /// <returns></returns>
-        public static int Compute(String sRow, String sCol)
+        public static int Compute(string sRow, string sCol)
         {
-            int RowLen = sRow.Length;  // length of sRow
-            int ColLen = sCol.Length;  // length of sCol
-            int RowIdx;                // iterates through sRow
-            int ColIdx;                // iterates through sCol
-            char Row_i;                // ith character of sRow
-            char Col_j;                // jth character of sCol
-            int cost;                   // cost
+            var RowLen = sRow.Length; // length of sRow
+            var ColLen = sCol.Length; // length of sCol
+            int RowIdx; // iterates through sRow
+            int ColIdx; // iterates through sCol
+            char Row_i; // ith character of sRow
+            char Col_j; // jth character of sCol
+            int cost; // cost
 
             /// Test string length
             if (Math.Max(sRow.Length, sCol.Length) > Math.Pow(2, 31))
-                throw (new Exception("\nMaximum string length in Levenshtein.iLD is " + Math.Pow(2, 31) + ".\nYours is " + Math.Max(sRow.Length, sCol.Length) + "."));
+                throw new Exception("\nMaximum string length in Levenshtein.iLD is " + Math.Pow(2, 31) +
+                                    ".\nYours is " + Math.Max(sRow.Length, sCol.Length) + ".");
 
             // Step 1
 
-            if (RowLen == 0)
-            {
-                return ColLen;
-            }
+            if (RowLen == 0) return ColLen;
 
-            if (ColLen == 0)
-            {
-                return RowLen;
-            }
+            if (ColLen == 0) return RowLen;
 
             /// Create the two vectors
-            int[] v0 = new int[RowLen + 1];
-            int[] v1 = new int[RowLen + 1];
+            var v0 = new int[RowLen + 1];
+            var v1 = new int[RowLen + 1];
             int[] vTmp;
-
 
 
             /// Step 2
             /// Initialize the first vector
-            for (RowIdx = 1; RowIdx <= RowLen; RowIdx++)
-            {
-                v0[RowIdx] = RowIdx;
-            }
+            for (RowIdx = 1; RowIdx <= RowLen; RowIdx++) v0[RowIdx] = RowIdx;
 
             // Step 3
 
@@ -72,29 +63,19 @@ namespace Nestor.Tools.Helpers
                     // Step 5
 
                     if (Row_i == Col_j)
-                    {
                         cost = 0;
-                    }
                     else
-                    {
                         cost = 1;
-                    }
 
                     // Step 6
 
                     /// Find minimum
-                    int m_min = v0[RowIdx] + 1;
-                    int b = v1[RowIdx - 1] + 1;
-                    int c = v0[RowIdx - 1] + cost;
+                    var m_min = v0[RowIdx] + 1;
+                    var b = v1[RowIdx - 1] + 1;
+                    var c = v0[RowIdx - 1] + cost;
 
-                    if (b < m_min)
-                    {
-                        m_min = b;
-                    }
-                    if (c < m_min)
-                    {
-                        m_min = c;
-                    }
+                    if (b < m_min) m_min = b;
+                    if (c < m_min) m_min = c;
 
                     v1[RowIdx] = m_min;
                 }
@@ -103,7 +84,6 @@ namespace Nestor.Tools.Helpers
                 vTmp = v0;
                 v0 = v1;
                 v1 = vTmp;
-
             }
 
 
@@ -115,8 +95,8 @@ namespace Nestor.Tools.Helpers
             /// The vectors where swaped one last time at the end of the last loop,
             /// that is why the result is now in v0 rather than in v1
             //System.Console.WriteLine("iDist=" + v0[RowLen]);
-            int max = System.Math.Max(RowLen, ColLen);
-            return ((100 * v0[RowLen]) / max);
+            var max = Math.Max(RowLen, ColLen);
+            return 100 * v0[RowLen] / max;
         }
     }
 }

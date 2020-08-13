@@ -8,11 +8,12 @@ namespace Nestor.Tools.Domain.Helpers
     {
         public static void ValidateObject(this object obj)
         {
-            var context = new ValidationContext(obj, serviceProvider: null, items: null);
-            var result = obj.TryValidateObject(); //System.ComponentModel.DataAnnotations.Validator.ValidateObject(obj, context, true);
+            var context = new ValidationContext(obj, null, null);
+            var result =
+                obj.TryValidateObject(); //System.ComponentModel.DataAnnotations.Validator.ValidateObject(obj, context, true);
             if (result != null)
             {
-                StringBuilder errors = new StringBuilder();
+                var errors = new StringBuilder();
                 foreach (var e in result)
                     errors.AppendLine(string.Format("- {0}", e.ErrorMessage));
 
@@ -21,19 +22,18 @@ namespace Nestor.Tools.Domain.Helpers
         }
 
         /// <summary>
-        /// Valide l'objet passé en paramètre 
+        ///     Valide l'objet passé en paramètre
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public static ICollection<ValidationResult> TryValidateObject(this object obj)
         {
-            var context = new ValidationContext(obj, serviceProvider: null, items: null);
+            var context = new ValidationContext(obj, null, null);
             var result = new List<ValidationResult>();
 
-            if (System.ComponentModel.DataAnnotations.Validator.TryValidateObject(obj, context, result, true))
+            if (Validator.TryValidateObject(obj, context, result, true))
                 return null;
-            else
-                return result;
+            return result;
         }
     }
 }

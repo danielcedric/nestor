@@ -1,26 +1,27 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Data;
 using System.Data.SqlClient;
-using Nestor.Tools.Exceptions;
 using System.IO;
+using System.Text;
+using Nestor.Tools.Exceptions;
 
 namespace Nestor.Tools.Infrastructure.Helpers
 {
     public class SqlServerDbHelper
     {
         /// <summary>
-        /// SQL master database name.
+        ///     SQL master database name.
         /// </summary>
         public const string MasterDatabaseName = "master";
 
         /// <summary>
-        /// Returns true if we can connect to the database.
+        ///     Returns true if we can connect to the database.
         /// </summary>
         public static bool ConnectToSqlDatabase(string masterDbConnectionString)
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(masterDbConnectionString))
+                using (var conn = new SqlConnection(masterDbConnectionString))
                 {
                     conn.Open();
                 }
@@ -29,73 +30,74 @@ namespace Nestor.Tools.Infrastructure.Helpers
             }
             catch (SqlException e)
             {
-                throw new NestorException($"Failed to connect to SQL database with connection string : {masterDbConnectionString}", e);
+                throw new NestorException(
+                    $"Failed to connect to SQL database with connection string : {masterDbConnectionString}", e);
             }
         }
 
         /// <summary>
-        /// Retourne vrai si la base de données <paramref name="dbName"/> existe
+        ///     Retourne vrai si la base de données <paramref name="dbName" /> existe
         /// </summary>
         /// <param name="masterDbConnectionString">Chaine de connexion vers la base master</param>
         /// <param name="dbName">Base de donnée recherchée</param>
         /// <returns></returns>
         public static bool DatabaseExists(string masterDbConnectionString, string dbName)
         {
-            using (SqlConnection conn = new SqlConnection(masterDbConnectionString))
+            using (var conn = new SqlConnection(masterDbConnectionString))
             {
                 conn.Open();
 
-                SqlCommand cmd = conn.CreateCommand();
+                var cmd = conn.CreateCommand();
                 cmd.CommandText = "select count(*) from sys.databases where name = @dbname";
                 cmd.Parameters.AddWithValue("@dbname", dbName);
                 cmd.CommandTimeout = 60;
-                int count = cmd.ExecuteReader(System.Data.CommandBehavior.SingleResult).GetInt32(0);
+                var count = cmd.ExecuteReader(CommandBehavior.SingleResult).GetInt32(0);
 
-                bool exists = count > 0;
+                var exists = count > 0;
                 return exists;
             }
         }
 
         /// <summary>
-        /// Retourne vrai si la base de données souhaitée est en ligne
+        ///     Retourne vrai si la base de données souhaitée est en ligne
         /// </summary>
         /// <param name="masterDbConnectionString"></param>
         /// <param name="expectedDbName"></param>
         /// <returns></returns>
         public static bool DatabaseIsOnline(string masterDbConnectionString, string expectedDbName)
         {
-            using (SqlConnection conn = new SqlConnection(masterDbConnectionString))
+            using (var conn = new SqlConnection(masterDbConnectionString))
             {
                 conn.Open();
 
-                SqlCommand cmd = conn.CreateCommand();
+                var cmd = conn.CreateCommand();
                 cmd.CommandText = "select count(*) from sys.databases where name = @dbname and state = 0"; // online
                 cmd.Parameters.AddWithValue("@dbname", expectedDbName);
                 cmd.CommandTimeout = 60;
-                int count = cmd.ExecuteReader(System.Data.CommandBehavior.SingleResult).GetInt32(0);
+                var count = cmd.ExecuteReader(CommandBehavior.SingleResult).GetInt32(0);
 
-                bool exists = count > 0;
+                var exists = count > 0;
                 return exists;
             }
         }
 
         /// <summary>
-        /// Créé la base de données dont le nom est passé en paramètre <paramref name="dbNameToCreate"/>
+        ///     Créé la base de données dont le nom est passé en paramètre <paramref name="dbNameToCreate" />
         /// </summary>
         /// <param name="masterDbConnectionString">Chaine de connexion vers la base de données master</param>
         /// <param name="dbNameToCreate">Nom de la base de données à créer</param>
         public static void CreateDatabase(string masterDbConnectionString, string dbNameToCreate)
         {
             //ConsoleUtils.WriteInfo("Creating database {0}", db);
-            using (SqlConnection conn = new SqlConnection(masterDbConnectionString))
+            using (var conn = new SqlConnection(masterDbConnectionString))
             {
                 conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
+                var cmd = conn.CreateCommand();
 
                 // Determine if we are connecting to Azure SQL DB
                 cmd.CommandText = "SELECT SERVERPROPERTY('EngineEdition')";
                 cmd.CommandTimeout = 60;
-                int engineEdition = cmd.ExecuteReader(System.Data.CommandBehavior.SingleResult).GetInt32(0);
+                var engineEdition = cmd.ExecuteReader(CommandBehavior.SingleResult).GetInt32(0);
 
                 if (engineEdition == 5)
                 {
@@ -134,15 +136,15 @@ namespace Nestor.Tools.Infrastructure.Helpers
 
         public static void DropDatabase(string masterDbConnectionString, string dbToDrop)
         {
-            using (SqlConnection conn = new SqlConnection(masterDbConnectionString))
+            using (var conn = new SqlConnection(masterDbConnectionString))
             {
                 conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
+                var cmd = conn.CreateCommand();
 
                 // Determine if we are connecting to Azure SQL DB
                 cmd.CommandText = "SELECT SERVERPROPERTY('EngineEdition')";
                 cmd.CommandTimeout = 60;
-                int engineEdition = cmd.ExecuteReader(System.Data.CommandBehavior.SingleResult).GetInt32(0);
+                var engineEdition = cmd.ExecuteReader(CommandBehavior.SingleResult).GetInt32(0);
 
                 // Drop the database
                 if (engineEdition == 5)
@@ -166,15 +168,15 @@ namespace Nestor.Tools.Infrastructure.Helpers
         public static void ExecuteSqlScript(string masterDbConnectionString, string schemaFile)
         {
             //ConsoleUtils.WriteInfo("Executing script {0}", schemaFile);
-            using (SqlConnection conn = new SqlConnection(masterDbConnectionString))
+            using (var conn = new SqlConnection(masterDbConnectionString))
             {
                 conn.Open();
-                SqlCommand cmd = conn.CreateCommand();
+                var cmd = conn.CreateCommand();
 
                 // Read the commands from the sql script file
-                IEnumerable<string> commands = ReadSqlScript(schemaFile);
+                var commands = ReadSqlScript(schemaFile);
 
-                foreach (string command in commands)
+                foreach (var command in commands)
                 {
                     cmd.CommandText = command;
                     cmd.CommandTimeout = 60;
@@ -185,13 +187,12 @@ namespace Nestor.Tools.Infrastructure.Helpers
 
         private static IEnumerable<string> ReadSqlScript(string scriptFile)
         {
-            List<string> commands = new List<string>();
+            var commands = new List<string>();
             using (TextReader tr = new StreamReader(scriptFile))
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
                 string line;
                 while ((line = tr.ReadLine()) != null)
-                {
                     if (line == "GO")
                     {
                         commands.Add(sb.ToString());
@@ -201,14 +202,13 @@ namespace Nestor.Tools.Infrastructure.Helpers
                     {
                         sb.AppendLine(line);
                     }
-                }
             }
 
             return commands;
         }
 
         /// <summary>
-        /// Escapes a SQL object name with brackets to prevent SQL injection.
+        ///     Escapes a SQL object name with brackets to prevent SQL injection.
         /// </summary>
         private static string BracketEscapeName(string sqlName)
         {

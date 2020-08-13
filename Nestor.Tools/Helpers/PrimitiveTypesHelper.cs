@@ -5,49 +5,49 @@ namespace Nestor.Tools.Helpers
 {
     public static class PrimitiveTypesHelper
     {
-        private static readonly Type[] primitiveTypes = null;
+        private static readonly Type[] primitiveTypes;
 
         /// <summary>
-        /// Constructeur statique
+        ///     Constructeur statique
         /// </summary>
         static PrimitiveTypesHelper()
         {
             var types = new[]
-                          {
-                              typeof (Enum),
-                              typeof (String),
-                              typeof (Char),
-                              typeof (Guid),
+            {
+                typeof(Enum),
+                typeof(string),
+                typeof(char),
+                typeof(Guid),
 
-                              typeof (Boolean),
-                              typeof (Byte),
-                              typeof (Int16),
-                              typeof (Int32),
-                              typeof (Int64),
-                              typeof (Single),
-                              typeof (Double),
-                              typeof (Decimal),
+                typeof(bool),
+                typeof(byte),
+                typeof(short),
+                typeof(int),
+                typeof(long),
+                typeof(float),
+                typeof(double),
+                typeof(decimal),
 
-                              typeof (SByte),
-                              typeof (UInt16),
-                              typeof (UInt32),
-                              typeof (UInt64),
+                typeof(sbyte),
+                typeof(ushort),
+                typeof(uint),
+                typeof(ulong),
 
-                              typeof (DateTime),
-                              typeof (DateTimeOffset),
-                              typeof (TimeSpan),
-                          };
+                typeof(DateTime),
+                typeof(DateTimeOffset),
+                typeof(TimeSpan)
+            };
 
 
             var nullTypes = from t in types
-                            where t.IsValueType
-                            select typeof(Nullable<>).MakeGenericType(t);
+                where t.IsValueType
+                select typeof(Nullable<>).MakeGenericType(t);
 
             primitiveTypes = types.Concat(nullTypes).ToArray();
         }
 
         /// <summary>
-        /// Obtient un booléen qui indique si le type passé en paramètre est un type "valeur" ou "struct"
+        ///     Obtient un booléen qui indique si le type passé en paramètre est un type "valeur" ou "struct"
         /// </summary>
         /// <param name="type">type à tester</param>
         /// <returns></returns>

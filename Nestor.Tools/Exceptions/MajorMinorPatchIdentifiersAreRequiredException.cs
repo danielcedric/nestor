@@ -2,7 +2,8 @@
 {
     public class MajorMinorPatchIdentifiersAreRequiredException : NestorException
     {
-        public MajorMinorPatchIdentifiersAreRequiredException() : base("Major, minor and patch identifiers are required")
+        public MajorMinorPatchIdentifiersAreRequiredException() : base(
+            "Major, minor and patch identifiers are required")
         {
         }
     }

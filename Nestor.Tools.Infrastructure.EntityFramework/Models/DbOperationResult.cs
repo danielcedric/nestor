@@ -3,25 +3,37 @@
     public class DbOperationResult
     {
         #region Enum
-        public enum DbOperationStatus { Success, Error, NotExecuted }
+
+        public enum DbOperationStatus
+        {
+            Success,
+            Error,
+            NotExecuted
+        }
+
         #endregion
 
         #region Properties
+
         /// <summary>
-        /// Affecte ou obtient la commande SQL
+        ///     Affecte ou obtient la commande SQL
         /// </summary>
         public string SqlCommand { get; set; }
+
         /// <summary>
-        /// Affecte ou obtient l'état de la requête
+        ///     Affecte ou obtient l'état de la requête
         /// </summary>
         public DbOperationStatus Status { get; set; }
+
         /// <summary>
-        /// Affecte ou obtient le message
+        ///     Affecte ou obtient le message
         /// </summary>
         public string Message { get; set; }
+
         #endregion
 
         #region Constructors
+
         public DbOperationResult() : this(null, DbOperationStatus.NotExecuted)
         {
         }
@@ -32,11 +44,10 @@
 
         public DbOperationResult(string sqlCommand, DbOperationStatus status)
         {
-
-            this.SqlCommand = sqlCommand;
-            this.Status = status;
+            SqlCommand = sqlCommand;
+            Status = status;
         }
-        #endregion
 
+        #endregion
     }
 }

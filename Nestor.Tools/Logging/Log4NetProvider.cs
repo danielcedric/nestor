@@ -15,7 +15,7 @@
 //        {
 
 //        }
-        
+
 //        public ILogger CreateLogger(string name)
 //        {
 //            if (!loggers.ContainsKey(name))
@@ -39,5 +39,6 @@
 //        }
 //    }
 
-    
+
 //}
+

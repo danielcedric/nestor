@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Nestor.Tools.Algorithms
 {
@@ -7,16 +6,12 @@ namespace Nestor.Tools.Algorithms
     {
         public static string CleanInput(string input)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var c in input)
-            {
-                if (Char.IsDigit(c) ||
+                if (char.IsDigit(c) ||
                     c >= 'a' && c <= 'z' ||
                     c >= 'A' && c <= 'Z')
-                {
-                    sb.Append(Char.ToUpper(c));
-                }
-            }
+                    sb.Append(char.ToUpper(c));
             return sb.ToString();
         }
     }

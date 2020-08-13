@@ -1,5 +1,5 @@
-﻿using Nestor.Tools.Exceptions;
-using System;
+﻿using System;
+using Nestor.Tools.Exceptions;
 
 namespace Nestor.Tools.Infrastructure.FluentConfig
 {
@@ -7,17 +7,14 @@ namespace Nestor.Tools.Infrastructure.FluentConfig
     {
         public FluentConfigurationException()
         {
-
         }
 
         public FluentConfigurationException(string message) : base(message)
         {
-
         }
 
         public FluentConfigurationException(string message, Exception innerException) : base(message, innerException)
         {
-
         }
     }
 }

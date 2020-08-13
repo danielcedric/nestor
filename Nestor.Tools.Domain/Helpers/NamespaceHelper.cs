@@ -7,7 +7,7 @@ namespace Nestor.Tools.Domain.Helpers
         public const string DOMAIN_NAMESPACE_PATTERN = "(?<=Business.).*?(?=.Domain)";
 
         /// <summary>
-        /// Extrait le nom du domaine depuis l'espace de nom
+        ///     Extrait le nom du domaine depuis l'espace de nom
         /// </summary>
         /// <param name="ns"></param>
         /// <returns></returns>

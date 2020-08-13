@@ -6,12 +6,10 @@ namespace Nestor.Tools.Exceptions
     {
         public NullReferenceException() : base($"The object of type {typeof(T).FullName} is null")
         {
-
         }
 
         public NullReferenceException(string message) : base(message)
         {
-
         }
     }
 }

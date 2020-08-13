@@ -7,14 +7,11 @@ namespace Nestor.Tools.Helpers
     {
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            foreach (var item in items)
-            {
-                collection.Add(item);
-            }
+            foreach (var item in items) collection.Add(item);
         }
 
         /// <summary>
-        /// Convertit un dictionnaire de clé valeur en objet dynamique
+        ///     Convertit un dictionnaire de clé valeur en objet dynamique
         /// </summary>
         /// <param name="source">Object source à convertir</param>
         /// <returns>Object dynamique</returns>
@@ -24,6 +21,5 @@ namespace Nestor.Tools.Helpers
             someObject.AddRange(source);
             return someObject;
         }
-        
     }
 }

@@ -7,36 +7,45 @@ namespace Nestor.Tools.Domain.Abstractions
     public class Enumeration : IComparable
     {
         #region Properties
+
         /// <summary>
-        /// Affecte ou obtient le nom de l'énumération
+        ///     Affecte ou obtient le nom de l'énumération
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
+
         /// <summary>
-        /// Affecte ou obtient l'identifiant de l'énumération
+        ///     Affecte ou obtient l'identifiant de l'énumération
         /// </summary>
         public int Id { get; set; }
+
         #endregion
 
         #region Constructors
-        protected Enumeration() { }
+
+        protected Enumeration()
+        {
+        }
 
         protected Enumeration(int id, string name)
         {
-            this.Id = id;
-            this.Name = name;
+            Id = id;
+            Name = name;
         }
+
         #endregion
-        
+
         #region Methods
+
         /// <summary>
-        /// Obtient toutes les instances de l'énumération
+        ///     Obtient toutes les instances de l'énumération
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static IEnumerable<T> GetAll<T>() where T : Enumeration, new()
         {
             var type = typeof(T);
-            var fields = type.GetTypeInfo().GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
+            var fields = type.GetTypeInfo()
+                .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
 
             foreach (var info in fields)
             {
@@ -69,8 +78,9 @@ namespace Nestor.Tools.Domain.Abstractions
 
         public int CompareTo(object obj)
         {
-            return Id.CompareTo(((Enumeration)obj)?.Id);
+            return Id.CompareTo(((Enumeration) obj)?.Id);
         }
+
         #endregion
     }
 }

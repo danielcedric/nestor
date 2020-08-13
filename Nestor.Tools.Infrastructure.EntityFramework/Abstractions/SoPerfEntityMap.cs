@@ -1,18 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nestor.Tools.Domain.Abstractions;
-using System;
 using Nestor.Tools.Domain.Helpers;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 {
-    public class EntityWithCompositeIdMap<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : class, IEntityWithCompositeId
+    public class EntityWithCompositeIdMap<TEntity> : IEntityTypeConfiguration<TEntity>
+        where TEntity : class, IEntityWithCompositeId
     {
-
-
         /// <summary>
-        /// Génère la configuration type pour l'entité <typeparamref name="TEntity"/>
-        /// - La table générée sera du nom du type de l'entité
+        ///     Génère la configuration type pour l'entité <typeparamref name="TEntity" />
+        ///     - La table générée sera du nom du type de l'entité
         /// </summary>
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<TEntity> builder)
@@ -27,9 +26,9 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
     public class EntityWithIdMap<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : class, IEntityWithId
     {
         /// <summary>
-        /// Génère la configuration type pour l'entité <typeparamref name="TEntity"/>
-        /// - La table générée sera du nom du type de l'entité
-        /// - Le champ Id sera clé primaire
+        ///     Génère la configuration type pour l'entité <typeparamref name="TEntity" />
+        ///     - La table générée sera du nom du type de l'entité
+        ///     - Le champ Id sera clé primaire
         /// </summary>
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<TEntity> builder)
@@ -42,12 +41,13 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         }
     }
 
-    public class EntityWithIdMap<TEntity, TId> : IEntityTypeConfiguration<TEntity> where TEntity : class, IEntityWithId<TId> where TId : IEquatable<TId>
+    public class EntityWithIdMap<TEntity, TId> : IEntityTypeConfiguration<TEntity>
+        where TEntity : class, IEntityWithId<TId> where TId : IEquatable<TId>
     {
         /// <summary>
-        /// Génère la configuration type pour l'entité <typeparamref name="TEntity"/>
-        /// - La table générée sera du nom du type de l'entité
-        /// - Le champ Id sera clé primaire
+        ///     Génère la configuration type pour l'entité <typeparamref name="TEntity" />
+        ///     - La table générée sera du nom du type de l'entité
+        ///     - Le champ Id sera clé primaire
         /// </summary>
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<TEntity> builder)
@@ -60,13 +60,14 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         }
     }
 
-    public class EntityWithTrackingMap<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : class, IEntityWithTracking
+    public class EntityWithTrackingMap<TEntity> : IEntityTypeConfiguration<TEntity>
+        where TEntity : class, IEntityWithTracking
     {
         /// <summary>
-        /// Génère la configuration type pour l'entité <typeparamref name="TEntity"/>
-        /// - La table générée sera du nom du type de l'entité
-        /// - Le champ Id sera clé primaire
-        /// - Les champs CreatedAd, CreatedBy, UpdatedAd, UpdatedBy sont mappés.
+        ///     Génère la configuration type pour l'entité <typeparamref name="TEntity" />
+        ///     - La table générée sera du nom du type de l'entité
+        ///     - Le champ Id sera clé primaire
+        ///     - Les champs CreatedAd, CreatedBy, UpdatedAd, UpdatedBy sont mappés.
         /// </summary>
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<TEntity> builder)
