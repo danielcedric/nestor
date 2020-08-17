@@ -155,16 +155,14 @@ namespace Nestor.Tools.Domain.Abstractions
         /// <param name="oldValue">Ancienne valeur</param>
         /// <param name="newValue">Nouvelle valeur</param>
         /// <returns>Vrai si la valeur à été mise à jour, faux sinon</returns>
-        protected bool SetProperty<T>(string name, ref Nullable<T> oldValue, Nullable<T> newValue) where T : struct, System.IComparable<T>
+        protected void SetProperty<T>(string name, ref Nullable<T> oldValue, Nullable<T> newValue) where T : struct, System.IComparable<T>
         {
             if (oldValue.HasValue != newValue.HasValue || (newValue.HasValue && oldValue.Value.CompareTo(newValue.Value) != 0))
             {
                 oldValue = newValue;
                 PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
                 IsDirty = true;
-                return true;
             }
-            return false;
         }
         #endregion
     }
