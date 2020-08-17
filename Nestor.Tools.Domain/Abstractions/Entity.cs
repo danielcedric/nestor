@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Nestor.Tools.Domain.DataAnnotations;
@@ -8,18 +9,18 @@ using Nestor.Tools.Domain.Helpers;
 
 namespace Nestor.Tools.Domain.Abstractions
 {
-    public abstract class Entity : IEntity, IEquatable<IEntity>, IComparable<IEntity>
+    public abstract class Entity : IEntity, IEquatable<IEntity>, IComparable<IEntity>, INotifyPropertyChanged
     {
         #region Properties
+        /// <summary>
+        /// Déclenché lorsqu'une propriété de la classe a été modifiée
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        ///     Affecte ou obtient un dictionnaire contenant les propriétés qui ont changées
-        ///     Key = nom de la propriété
-        ///     Value = Tuple[AncienneValeur, NouvelleValeur]
+        /// Obtient un booléen qui indique si l'objet a été modifié depuis sa création
         /// </summary>
-        protected virtual Dictionary<string, Tuple<dynamic, dynamic>> ValuesChanged { get; set; } =
-            new Dictionary<string, Tuple<dynamic, dynamic>>();
-
+        public bool IsDirty { get; private set; }
         #endregion
 
         #region Methods
@@ -125,6 +126,46 @@ namespace Nestor.Tools.Domain.Abstractions
             }
         }
 
+        /// <summary>
+        /// Affecte une nouvelle valeur à la propriété passée en paramètre et déclenche l'événement PropertyChanged
+        /// </summary>
+        /// <typeparam name="T">Type du paramètre à setter</typeparam>
+        /// <param name="name">Nom de la propriété à setter</param>
+        /// <param name="oldValue">Ancienne valeur</param>
+        /// <param name="newValue">Nouvelle valeur</param>
+        /// <returns>Vrai si la valeur à été mise à jour, faux sinon</returns>
+        protected bool SetProperty<T>(string name, ref T oldValue, T newValue) where T : System.IComparable<T>
+        {
+            if (oldValue == null || oldValue.CompareTo(newValue) != 0)
+            {
+                oldValue = newValue;
+                PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
+                IsDirty = true;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Affecte une nouvelle valeur à la propriété nommée en paramètre et déclenche l'événement PropertyChanged.
+        /// A utiliser pour les types nullables
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        /// <param name="name">nom de la propriété à setter</param>
+        /// <param name="oldValue">Ancienne valeur</param>
+        /// <param name="newValue">Nouvelle valeur</param>
+        /// <returns>Vrai si la valeur à été mise à jour, faux sinon</returns>
+        protected bool SetProperty<T>(string name, ref Nullable<T> oldValue, Nullable<T> newValue) where T : struct, System.IComparable<T>
+        {
+            if (oldValue.HasValue != newValue.HasValue || (newValue.HasValue && oldValue.Value.CompareTo(newValue.Value) != 0))
+            {
+                oldValue = newValue;
+                PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
+                IsDirty = true;
+                return true;
+            }
+            return false;
+        }
         #endregion
     }
 
