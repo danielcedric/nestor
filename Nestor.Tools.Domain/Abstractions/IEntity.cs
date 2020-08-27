@@ -18,7 +18,7 @@ namespace Nestor.Tools.Domain.Abstractions
         TId Id { get; set; }
     }
 
-    public interface IEntityWithId : IEntityWithId<Guid>
+    public interface IEntityWithId : IEntityWithId<long>
     {
     }
 

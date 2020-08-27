@@ -158,7 +158,7 @@ namespace Nestor.Tools.Domain.Abstractions
         protected void SetProperty<T>(string name, ref Nullable<T> oldValue, Nullable<T> newValue) where T : struct, System.IComparable<T>
         {
             if (oldValue.HasValue != newValue.HasValue || (newValue.HasValue && oldValue.Value.CompareTo(newValue.Value) != 0))
-            { 
+            {
                 oldValue = newValue;
                 PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
                 IsDirty = true;
@@ -205,7 +205,7 @@ namespace Nestor.Tools.Domain.Abstractions
     ///     Entité de base qui sera mappée dans un ORM.
     ///     L'id sera de type Int32
     /// </summary>
-    public abstract class EntityWithId : EntityWithId<Guid>, IEntityWithId<Guid>
+    public abstract class EntityWithId : EntityWithId<long>, IEntityWithId<long>
     {
     }
 
