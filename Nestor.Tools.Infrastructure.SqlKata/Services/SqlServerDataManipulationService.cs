@@ -168,7 +168,7 @@ namespace Nestor.Tools.Infrastructure.SqlKata.Services
             var query = db.Query($"{schema}.{table}").Where("Id", id).AsUpdate(columns, values);
 
             // Insertion de l'enregistrement
-            var affected = db.ExecuteScalar<int>(query, transaction, CommandType.Text);
+            var affected = db.ExecuteScalar<int>(query, transaction);
             //transaction.Commit();
 
             return affected;
@@ -193,7 +193,7 @@ namespace Nestor.Tools.Infrastructure.SqlKata.Services
 
             var query = db.Query($"{schema}.{table}").Where("Id", id).AsDelete();
 
-            var affected = db.ExecuteScalar<int>(query, transaction, CommandType.Text);
+            var affected = db.ExecuteScalar<int>(query, transaction);
 
             return affected;
         }
@@ -282,7 +282,7 @@ namespace Nestor.Tools.Infrastructure.SqlKata.Services
         public async Task<long> CountAsync(DbConnection connection, string table, string schema)
         {
             var db = new QueryFactory(connection, new SqlServerCompiler());
-            var query = new Query($"{schema}.{table}").AsCount("Id");
+            var query = new Query($"{schema}.{table}").AsCount(new string[] { "Id" });
 
             return await db.CountAsync<long>(query);
         }
