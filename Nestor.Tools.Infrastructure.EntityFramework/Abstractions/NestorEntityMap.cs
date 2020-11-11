@@ -14,7 +14,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         ///     - La table générée sera du nom du type de l'entité
         /// </summary>
         /// <param name="builder"></param>
-        public void Configure(EntityTypeBuilder<TEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             var tableName = typeof(TEntity).Name;
             var schema = typeof(TEntity).Namespace.ExtractSchemaFromDomain();
@@ -31,7 +31,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         ///     - Le champ Id sera clé primaire
         /// </summary>
         /// <param name="builder"></param>
-        public void Configure(EntityTypeBuilder<TEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             var tableName = typeof(TEntity).Name;
             var schema = typeof(TEntity).Namespace.ExtractSchemaFromDomain();
@@ -50,7 +50,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         ///     - Le champ Id sera clé primaire
         /// </summary>
         /// <param name="builder"></param>
-        public void Configure(EntityTypeBuilder<TEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             var tableName = typeof(TEntity).Name;
             var schema = typeof(TEntity).Namespace.ExtractSchemaFromDomain();
@@ -70,7 +70,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         ///     - Les champs CreatedAd, CreatedBy, UpdatedAd, UpdatedBy sont mappés.
         /// </summary>
         /// <param name="builder"></param>
-        public void Configure(EntityTypeBuilder<TEntity> builder)
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             var tableName = typeof(TEntity).Name;
             var schema = typeof(TEntity).Namespace.ExtractSchemaFromDomain();
