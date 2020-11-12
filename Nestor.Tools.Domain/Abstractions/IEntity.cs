@@ -26,7 +26,7 @@ namespace Nestor.Tools.Domain.Abstractions
     {
     }
 
-    public interface IEntityWithTracking : IEntityWithId<Guid>
+    public interface IEntityWithTracking<TId> : IEntityWithId<TId>
     {
         DateTime CreatedAt { get; set; }
         string CreatedBy { get; set; }

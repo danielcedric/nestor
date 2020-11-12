@@ -84,4 +84,29 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
             builder.Property(c => c.UpdatedBy).HasMaxLength(100);
         }
     }
+
+    public class EntityWithTrackingMap<TEntity, TId> : IEntityTypeConfiguration<TEntity>
+        where TEntity : class, IEntityWithTracking
+    {
+        /// <summary>
+        ///     Génère la configuration type pour l'entité <typeparamref name="TEntity" />
+        ///     - La table générée sera du nom du type de l'entité
+        ///     - Le champ Id sera clé primaire
+        ///     - Les champs CreatedAd, CreatedBy, UpdatedAd, UpdatedBy sont mappés.
+        /// </summary>
+        /// <param name="builder"></param>
+        public virtual void Configure(EntityTypeBuilder<TEntity> builder)
+        {
+            var tableName = typeof(TEntity).Name;
+            var schema = typeof(TEntity).Namespace.ExtractSchemaFromDomain();
+
+            builder.ToTable(tableName, schema);
+            builder.HasKey(x => x.Id);
+
+            builder.Property(c => c.CreatedAt).IsRequired().HasDefaultValueSql("getutcdate()");
+            builder.Property(c => c.CreatedBy).IsRequired().HasMaxLength(100);
+            builder.Property(c => c.UpdatedAt);
+            builder.Property(c => c.UpdatedBy).HasMaxLength(100);
+        }
+    }
 }
