@@ -173,6 +173,48 @@ namespace Nestor.Tools.Domain.Abstractions
     /// </summary>
     public abstract class EntityWithCompositeId : Entity, IEntityWithCompositeId
     {
+        public EntityWithCompositeId()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+
+        #region Properties
+        /// <summary>
+        ///     Affecte ou obtient la date de création de l'objet
+        /// </summary>
+        public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        ///     Affecte ou obtient le nom d'utilisateur de la personne qui a créé l'objet
+        /// </summary>
+        public string CreatedBy { get; set; }
+
+        /// <summary>
+        ///     Affecte ou obtient la date de dernière mise à jour de l'objet
+        /// </summary>
+        public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
+        ///     Affecte ou obtient le nom d'utilisateur de la personne qui a modifié l'objet
+        /// </summary>
+        public string UpdatedBy { get; set; }
+
+        /// <summary>
+        ///     Affecte ou obtient la date de suppression de l'objet
+        /// </summary>
+        public DateTime? DeletedAt { get; set; }
+
+        /// <summary>
+        ///     Affecte ou obtient le nom d'utilisateur de la personne qui a supprimé l'objet
+        /// </summary>
+        public string DeletedBy { get; set; }
+
+        /// <summary>
+        ///     Obtient un booléen qui indique si l'édition a été supprimée
+        /// </summary>
+        public bool HasBeenDeleted => DeletedAt.HasValue;
+
+        #endregion
     }
 
     /// <summary>
@@ -182,7 +224,10 @@ namespace Nestor.Tools.Domain.Abstractions
     public abstract class EntityWithId<T> : Entity, IEntityWithId<T>
     {
         #region Constructors
-
+        public EntityWithId()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
         #endregion
 
         #region Properties
@@ -197,33 +242,6 @@ namespace Nestor.Tools.Domain.Abstractions
         ///     Obtient si l'instance actuelle est transiante
         /// </summary>
         public bool IsTransient => default(T).Equals(Id);
-
-        #endregion
-    }
-
-    /// <summary>
-    ///     Entité de base qui sera mappée dans un ORM.
-    ///     L'id sera de type Int32
-    /// </summary>
-    public abstract class EntityWithId : EntityWithId<long>, IEntityWithId<long>
-    {
-    }
-
-    /// <summary>
-    ///     Type d'entité avec des données concernant le suivi
-    /// </summary>
-    public abstract class EntityWithTracking : EntityWithId, IEntityWithId
-    {
-        #region Constructors
-
-        public EntityWithTracking()
-        {
-            CreatedAt = DateTime.Now;
-        }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///     Affecte ou obtient la date de création de l'objet
@@ -261,5 +279,13 @@ namespace Nestor.Tools.Domain.Abstractions
         public bool HasBeenDeleted => DeletedAt.HasValue;
 
         #endregion
+    }
+
+    /// <summary>
+    ///     Entité de base qui sera mappée dans un ORM.
+    ///     L'id sera de type Int32
+    /// </summary>
+    public abstract class EntityWithId : EntityWithId<long>, IEntityWithId<long>
+    {
     }
 }
