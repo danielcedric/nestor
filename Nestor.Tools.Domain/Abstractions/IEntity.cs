@@ -16,6 +16,10 @@ namespace Nestor.Tools.Domain.Abstractions
     public interface IEntityWithId<TId> : IEntity
     {
         TId Id { get; set; }
+        DateTime CreatedAt { get; set; }
+        string CreatedBy { get; set; }
+        DateTime? UpdatedAt { get; set; }
+        string UpdatedBy { get; set; }
     }
 
     public interface IEntityWithId : IEntityWithId<long>
@@ -26,16 +30,4 @@ namespace Nestor.Tools.Domain.Abstractions
     {
     }
 
-
-    public interface IEntityWithTracking: IEntityWithTracking<long>
-    {
-    }
-
-    public interface IEntityWithTracking<TId> : IEntityWithId<TId>
-    {
-        DateTime CreatedAt { get; set; }
-        string CreatedBy { get; set; }
-        DateTime? UpdatedAt { get; set; }
-        string UpdatedBy { get; set; }
-    }
 }
