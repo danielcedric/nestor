@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Nestor.Tools.Domain.DataAnnotations;
+using Nestor.Tools.Domain.DomainEvents;
 using Nestor.Tools.Domain.Extensions;
 using Nestor.Tools.Domain.Helpers;
 
@@ -12,6 +13,12 @@ namespace Nestor.Tools.Domain.Abstractions
     public abstract class Entity : IEntity, IEquatable<IEntity>, IComparable<IEntity>, INotifyPropertyChanged
     {
         #region Properties
+        private List<IDomainEvent> domainEvents;
+        /// <summary>
+        /// Obtient la liste des événements de domaines relatifs à l'entité
+        /// </summary>
+        public List<IDomainEvent> DomainEvents => domainEvents;
+
         /// <summary>
         /// Déclenché lorsqu'une propriété de la classe a été modifiée
         /// </summary>
@@ -163,6 +170,26 @@ namespace Nestor.Tools.Domain.Abstractions
                 PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
                 IsDirty = true;
             }
+        }
+
+        /// <summary>
+        /// Ajoute un événement de domaine à la liste des événements de l'entité
+        /// </summary>
+        /// <param name="eventItem">Evénement</param>
+        public void AddDomainEvent(IDomainEvent eventItem)
+        {
+            domainEvents = domainEvents ?? new List<IDomainEvent>();
+            domainEvents.Add(eventItem);
+        }
+
+        /// <summary>
+        /// Supprime un événement de domaine de la liste des événements de l'entité
+        /// </summary>
+        /// <param name="eventItem">Evénement</param>
+        public void RemoveDomainEvent(IDomainEvent eventItem)
+        {
+            if (domainEvents is null) return;
+            domainEvents.Remove(eventItem);
         }
         #endregion
     }
