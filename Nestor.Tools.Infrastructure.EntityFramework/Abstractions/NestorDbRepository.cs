@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Nestor.Tools.Domain.Abstractions;
+using Nestor.Tools.Domain.DomainEvents;
 using Nestor.Tools.Infrastructure.Abstraction;
 using Nestor.Tools.Infrastructure.EntityFramework.Exceptions;
 
@@ -216,7 +217,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         /// </summary>
         /// <param name="action">Méthode à executer</param>
         /// <param name="parameter">Paramètres</param>
-        public void Execute<T>(Action<T> action, T parameter)
+        public void Execute(Action<TEntity> action, TEntity parameter)
         {
             Execute(action, parameter);
         }
@@ -228,7 +229,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         /// <param name="parameter">Paramètres</param>
         /// <param name="onSuccessAction">Méthode à éxecuter en cas de succès</param>
         /// <param name="clearSession">Indique la session nHibernate doit être effacée après le traitement</param>
-        public void Execute<T>(Action<T> action, T parameter, Action<T> onSuccessAction)
+        public void Execute(Action<TEntity> action, TEntity parameter, Action<TEntity> onSuccessAction)
         {
             Execute(action, parameter, onSuccessAction, null);
         }
@@ -239,7 +240,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         /// <param name="action">Méthode à executer</param>
         /// <param name="parameter">Paramètres</param>
         /// <param name="onErrorAction">Méthode à executer en cas d'erreur</param>
-        public void Execute<T>(Action<T> action, T parameter, Action<EntityFrameworkException> onErrorAction)
+        public void Execute(Action<TEntity> action, TEntity parameter, Action<EntityFrameworkException> onErrorAction)
         {
             Execute(action, parameter, onErrorAction);
         }
@@ -252,7 +253,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
         /// <param name="onSuccessAction">Méthode à executer en cas de succès</param>
         /// <param name="onErrorAction">Méthode à executer en cas d'erreur</param>
         /// <param name="clearSession">Indique la session nHibernate doit être nettoyée après le traitement</param>
-        public void Execute<T>(Action<T> action, T parameter, Action<T> onSuccessAction,
+        public void Execute(Action<TEntity> action, TEntity parameter, Action<TEntity> onSuccessAction,
             Action<EntityFrameworkException> onErrorAction)
         {
             using (var transaction = Context.Database.BeginTransaction())
@@ -260,6 +261,11 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
                 try
                 {
                     action(parameter);
+
+                    // Déclenchement des événements de domaine si l'entité est un aggrégat
+                    if(parameter is AggregateRoot)
+                        DomainEventStore.DispatchEventsForAggregate((parameter as AggregateRoot).Id);
+
                     transaction.Commit();
 
                     onSuccessAction?.Invoke(parameter);
