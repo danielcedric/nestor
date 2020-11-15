@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Nestor.Tools.Domain.DomainEvents
 {
-    public interface IHandle<IDomainEvent>
+    public interface IDomainEventHandler<IDomainEvent>
     {
         void SetupSubscriptions();
     }

@@ -5,7 +5,7 @@ using Nestor.Tools.Domain.Abstractions;
 
 namespace Nestor.Tools.Domain.DomainEvents
 {
-    public static class DomainEvents
+    public static class DomainEventStore
     {
         private static IList<AggregateRoot> markedAggregates = new List<AggregateRoot>();
         private static IDictionary<string, List<Action<IDomainEvent>>> handlersMap = new Dictionary<string, List<Action<IDomainEvent>>>();
