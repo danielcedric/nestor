@@ -1,7 +1,9 @@
 ﻿using System;
+using MediatR;
+
 namespace Nestor.Tools.Domain.DomainEvents
 {
-    public abstract class DomainEvent : IDomainEvent
+    public abstract class DomainEvent : IDomainEvent, INotification
     {
         #region Properties
         private Guid eventId = Guid.Empty;
