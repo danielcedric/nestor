@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Nestor.Tools.Domain.Abstractions;
+using Nestor.Tools.Domain.Entities;
 using Nestor.Tools.Domain.DataAnnotations;
 
 namespace Nestor.Tools.Domain.Helpers

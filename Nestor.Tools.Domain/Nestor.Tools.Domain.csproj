@@ -16,5 +16,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DomainEvents\" />
+    <Folder Include="Authorization\" />
+    <Folder Include="Authorization\Users\" />
+    <Folder Include="MultiTenancy\" />
+    <Folder Include="Entities\Auditing\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Authorization\" />
+    <None Remove="Authorization\Users\" />
+    <None Remove="MultiTenancy\" />
+    <None Remove="Entities\Auditing\" />
   </ItemGroup>
 </Project>

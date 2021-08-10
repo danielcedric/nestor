@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Nestor.Tools.Domain.Abstractions;
 using Nestor.Tools.Domain.DataAnnotations;
 using Nestor.Tools.Helpers;
 
-namespace Nestor.Tools.Domain.Extensions
+namespace Nestor.Tools.Domain.Entities
 {
     public static class IEntityExtension
     {

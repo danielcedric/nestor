@@ -5,21 +5,13 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Nestor.Tools.Domain.Abstractions;
+using Nestor.Tools.Domain.Entities;
 using Nestor.Tools.Domain.DomainEvents;
 using Nestor.Tools.Infrastructure.Abstraction;
 using Nestor.Tools.Infrastructure.EntityFramework.Exceptions;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
 {
-    public abstract class NestorDbRepository<TEntity> : NestorDbRepository<TEntity, long>
-        where TEntity : class, IEntityWithId<long>
-    {
-        public NestorDbRepository(DbContext dbContext) : base(dbContext)
-        {
-        }
-    }
-
     /// <summary>
     ///     Repository de base pour Entity Framework
     /// </summary>
@@ -27,7 +19,7 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
     /// <typeparam name="TEntity">Type de l'entité concernée</typeparam>
     /// <typeparam name="TId">Type d'identifiant</typeparam>
     public abstract class NestorDbRepository<TEntity, TId> : IRepository<TEntity, TId>
-        where TEntity : class, IEntityWithId<TId>
+        where TEntity : class, IEntity<TId>
     {
         //public NestorRepository(IDesignTimeDbContextFactory<DbContext> factory, params string[] args)
         //{

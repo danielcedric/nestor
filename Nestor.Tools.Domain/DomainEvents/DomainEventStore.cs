@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nestor.Tools.Domain.Abstractions;
+using Nestor.Tools.Domain.Entities;
 
 namespace Nestor.Tools.Domain.DomainEvents
 {
