@@ -1,4 +1,4 @@
-﻿using Nestor.Tools.Domain.Abstractions;
+﻿using Nestor.Tools.Domain.Entities;
 using Nestor.Tools.Exceptions;
 
 namespace Nestor.Tools.Application.Exceptions
@@ -10,7 +10,7 @@ namespace Nestor.Tools.Application.Exceptions
         {
         }
 
-        public InconsitencyEntityWithIdException(IEntityWithPrimaryKey entity, long Id) : base(
+        public InconsitencyEntityWithIdException(IEntityWithId entity, long Id) : base(
             $"{nameof(TEntity)} identifier ({entity.Id}) does not correspond to identifier gived in parameter({Id})")
         {
         }
