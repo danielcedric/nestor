@@ -14,13 +14,129 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-  - script: dotnet build --configuration $(buildConfiguration)
-    displayName: 'dotnet build $(buildConfiguration)'
   - task: NuGetCommand@2
+    displayName: 'NuGet restore'
     inputs:
-      command: 'pack'
-      packagesToPack: '**/*.csproj'
-      versioningScheme: 'byPrereleaseNumber'
-      majorVersion: '1'
-      minorVersion: '0'
-      patchVersion: '0'
+      restoreSolution: Nestor.sln
+      vstsFeed: 'd77161c9-513e-4767-8046-73835ae2e6b7'
+
+  - task: bleddynrichards.Assembly-Info-Task.Assembly-Info-NetCore.Assembly-Info-NetCore@2
+    displayName: 'Set Assembly Manifest Data'
+    inputs:
+      InsertAttributes: true
+      VersionNumber: '$(Build.BuildNumber)'
+      FileVersionNumber: '$(Build.BuildNumber)'
+      PackageVersion: '$(Build.BuildNumber)'
+      LogLevel: normal
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet pack Nestor.Tools'
+    inputs:
+      command: pack
+      packagesToPack: Nestor.Tools/Nestor.Tools.csproj
+      buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+      verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet pack Nestor.Tools.Application'
+    inputs:
+      command: pack
+      packagesToPack: Nestor.Tools.Application/Nestor.Tools.Application.csproj
+      buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+      verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet pack Nestor.Tools.AspNetCore'
+    inputs:
+      command: pack
+      packagesToPack: Nestor.Tools.AspNetCore/Nestor.Tools.AspNetCore.csproj
+      buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+      verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack Nestor.Tools.Domain'
+  inputs:
+    command: pack
+    packagesToPack: Nestor.Tools.Domain/Nestor.Tools.Domain.csproj
+    buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+    verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack Nestor.Tools.Infrastructure'
+  inputs:
+    command: pack
+    packagesToPack: Nestor.Tools.Infrastructure/Nestor.Tools.Infrastructure.csproj
+    buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+    verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack Nestor.Tools.Infrastructure.EntityFramework'
+  inputs:
+    command: pack
+    packagesToPack: Nestor.Tools.Infrastructure.EntityFramework/Nestor.Tools.Infrastructure.EntityFramework.csproj
+    buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+    verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack Nestor.Tools.Infrastructure.MultyTenancy'
+  inputs:
+    command: pack
+    packagesToPack: Nestor.Tools.Infrastructure.MultyTenancy/Nestor.Tools.Infrastructure.MultyTenancy.csproj
+    buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+    verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack Nestor.Tools.Infrastructure.SqlKata'
+  inputs:
+    command: pack
+    packagesToPack: Nestor.Tools.Infrastructure.SqlKata/Nestor.Tools.Infrastructure.SqlKata.csproj
+    buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+    verbosityPack: Minimal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet pack Nestor.Tools.Infrastructure.SqlServer'
+  inputs:
+    command: pack
+    packagesToPack: Nestor.Tools.Infrastructure.SqlServer/Nestor.Tools.Infrastructure.SqlServer.csproj
+    buildProperties: 'PackageVersion=$(Build.BuildNumber)'
+    verbosityPack: Normal
+
+  - task: DotNetCoreCLI@2
+  displayName: 'dotnet nuget push'
+  inputs:
+    command: push
+    publishVstsFeed: 'd77161c9-513e-4767-8046-73835ae2e6b7'
+
+  - task: richardfennellBM.BM-VSTS-XplatGenerateReleaseNotes.XplatGenerate-Release-Notes.XplatGenerateReleaseNotes@3
+  displayName: 'Generate Release Notes'
+  inputs:
+    outputfile: '$(Build.ArtifactStagingDirectory)/releasenotes.md'
+    templatefile: Docs/ReleasesNotes/Template.md
+    customHandlebarsExtensionCode: |
+     module.exports = { 
+               get_parameter(parameters, name) {
+                   var ob = JSON.parse(parameters)
+                   return ob[name]
+                 },
+                 
+               get_only_message_firstline(msg) {
+                   return msg.split(`\n`)[0]
+               }
+             };
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
