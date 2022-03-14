@@ -10,7 +10,7 @@ namespace Nestor.Tools.Domain.Authorization.Users
     /// <summary>
     /// Base class for user.
     /// </summary>
-    [Table("Users",Schema ="core")]
+    [Table("User",Schema ="core")]
     public abstract class UserBase : FullAuditedEntity<IEntity<Guid>>, IMayHaveTenant, IActivable
     {
         #region Constants
@@ -213,7 +213,11 @@ namespace Nestor.Tools.Domain.Authorization.Users
         /// If as user is not active, he/she can not use the application.
         /// </summary>
         public virtual bool IsActive { get; set; }
-        Guid? IMayHaveTenant.TenantId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
+        /// Get or set the facultative tenant id
+        /// </summary>
+        Guid? IMayHaveTenant.TenantId { get; set; }
         #endregion
 
         protected UserBase()

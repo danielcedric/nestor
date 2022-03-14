@@ -9,7 +9,7 @@ namespace Nestor.Tools.Domain.Authorization.Users
     // <summary>
     /// Used to store a User Login for external Login services.
     /// </summary>
-    [Table("UserLogins", Schema = "core")]
+    [Table("UserLogin", Schema = "core")]
     public class UserLogin : Entity, IMayHaveTenant
     {
         #region Constants
