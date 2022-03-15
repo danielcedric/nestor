@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.EntityFrameworkCore.Storage;
-using Nestor.Tools.Infrastructure.Abstractions;
+using Nestor.Tools.Infrastructure.DataDescription;
 using Nestor.Tools.Infrastructure.EntityFramework.Models;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Services

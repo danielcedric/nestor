@@ -4,14 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Nestor.Tools.Infrastructure.Abstraction
+namespace Nestor.Tools.Infrastructure.Repository
 {
-    public interface IRepository<TEntity> : IRepository<TEntity, long>
-        where TEntity : class
-    {
-    }
-
-    public interface IRepository<TEntity, TId>
+    public interface IDbRepository<TEntity, TId>
         where TEntity : class
     {
         /// <summary>
@@ -74,48 +69,26 @@ namespace Nestor.Tools.Infrastructure.Abstraction
         /// <param name="predicate">Prédicat de sélection</param>
         /// <returns>Le nombre d'éléments</returns>
         Task<int> CountByAsync(Expression<Func<TEntity, bool>> predicate);
-
         /// <summary>
-        ///     Ajout un objet transiant de type <typeparamref name="TEntity" />
+        /// Insère en masse un ensemble d'entités
         /// </summary>
-        /// <param name="entity">Objet transiant</param>
-        TEntity Add(TEntity entity);
-
+        /// <param name="entities">Entités à insérer</param>
+        void BulkInsert(IEnumerable<TEntity> entities);
         /// <summary>
-        ///     Ajout un objet transiant de type <typeparamref name="TEntity" />
+        /// Insère l'entité en base de données
         /// </summary>
-        /// <param name="entity">Objet transiant</param>
-        Task<TEntity> AddAsync(TEntity entity);
-
+        /// <param name="entity">entité à insérer</param>
+        void Insert(TEntity entity);
         /// <summary>
-        ///     Attache une entité de type <typeparamref name="TEntity" /> au contexte actuel
+        /// Mets à jour l'entité
         /// </summary>
-        /// <param name="entity"></param>
-        void Attach(TEntity entity);
-
+        /// <param name="entity">entité à mettre à jour</param>
+        void Update(TEntity entity);
         /// <summary>
-        ///     Attache une collection d'entités de type <typeparamref name="TEntity" /> au contexte actuel
+        /// Marque l'entité comme étant supprimée
         /// </summary>
-        /// <param name="entities"></param>
-        void Attach(IEnumerable<TEntity> entities);
-
-        /// <summary>
-        ///     Supprime un objet de type <typeparamref name="TEntity" />
-        /// </summary>
-        /// <param name="entity"></param>
-        int Delete(TEntity entity);
-
-        /// <summary>
-        ///     Supprime un objet de type <typeparamref name="TEntity" />
-        /// </summary>
-        /// <param name="entity"></param>
-        Task<int> DeleteAsync(TEntity entity);
-
-        /// <summary>
-        ///     Marque l'objet de type <typeparamref name="TEntity" /> commme étant modifié
-        /// </summary>
-        /// <param name="entity"></param>
-        void Edit(TEntity entity);
+        /// <param name="entity">entité à supprimer</param>
+            void Delete(TEntity entity);
 
         /// <summary>
         ///     Envoi en base de données les modifications

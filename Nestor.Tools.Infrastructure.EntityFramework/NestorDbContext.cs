@@ -3,38 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace Nestor.Tools.Infrastructure.EntityFramework.Abstractions
+namespace Nestor.Tools.Infrastructure.EntityFramework
 {
-    //public class NestorDbContext<TContext> : DbContext
-    //    where TContext : DbContext
-    //{
-    //    static NestorDbContext()
-    //    {
-
-    //    }
-
-    //    protected NestorDbContext() : base()
-    //    {
-    //        Database.Migrate();
-    //    }
-
-    //    protected NestorDbContext(DbContextOptions<TContext> options) : base(options)
-    //    {
-    //        Database.Migrate();
-    //    }
-
-    //}
-
     public class NestorDbContext : DbContext
     {
-        protected NestorDbContext()
+        public NestorDbContext() : base()
         {
-            Database.Migrate();
+           
         }
 
-        protected NestorDbContext(DbContextOptions options) : base(options)
+        public NestorDbContext(DbContextOptions options) : base(options)
         {
-            Database.Migrate();
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
