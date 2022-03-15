@@ -28,12 +28,11 @@
     <Folder Include="UnitOfWork\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj" />
-    <ProjectReference Include="..\Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj" />
-    <ProjectReference Include="..\Nestor.Tools.Domain\Nestor.Tools.Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="DataDescription\" />
     <None Remove="UnitOfWorks\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Nestor.Tools.Domain\Nestor.Tools.Domain.csproj" />
+    <ProjectReference Include="..\Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
