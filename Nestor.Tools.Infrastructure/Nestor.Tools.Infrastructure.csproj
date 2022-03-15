@@ -12,8 +12,12 @@
     <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj" />
-    <ProjectReference Include="..\Nestor.Tools.Domain\Nestor.Tools.Domain.csproj" />
+    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Nestor.Tools.Domain\Nestor.Tools.Domain.csproj">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Plugins\ComponentInfo.cs" />

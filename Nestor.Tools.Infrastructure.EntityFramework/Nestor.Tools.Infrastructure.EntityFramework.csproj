@@ -32,7 +32,11 @@
     <None Remove="UnitOfWorks\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nestor.Tools.Domain\Nestor.Tools.Domain.csproj" />
-    <ProjectReference Include="..\Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj" />
+    <ProjectReference Include="..\Nestor.Tools.Domain\Nestor.Tools.Domain.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>

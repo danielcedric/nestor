@@ -19,6 +19,8 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj" />
+    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>

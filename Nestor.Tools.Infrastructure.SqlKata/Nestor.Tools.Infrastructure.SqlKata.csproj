@@ -19,7 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Nestor.Tools.Infrastructure.EntityFramework\Nestor.Tools.Infrastructure.EntityFramework.csproj" />
+      <ProjectReference Include="..\Nestor.Tools.Infrastructure.EntityFramework\Nestor.Tools.Infrastructure.EntityFramework.csproj">
+        <Private>False</Private>
+      </ProjectReference>
     </ItemGroup>
 
 </Project>

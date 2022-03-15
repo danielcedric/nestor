@@ -12,8 +12,12 @@
     <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj" />
-    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj" />
+    <ProjectReference Include="..\Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Nestor.Tools\Nestor.Tools.csproj">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
