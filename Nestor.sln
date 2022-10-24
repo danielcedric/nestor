@@ -1,25 +1,20 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools", "Nestor.Tools\Nestor.Tools.csproj", "{DAE81806-4D80-456B-B917-83F26D715839}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32126.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools", "Nestor.Tools\Nestor.Tools.csproj", "{DAE81806-4D80-456B-B917-83F26D715839}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Application", "Nestor.Tools.Application\Nestor.Tools.Application.csproj", "{F5E8AFA2-D007-4D8E-80D0-28AE6BFF1E20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools.Application", "Nestor.Tools.Application\Nestor.Tools.Application.csproj", "{F5E8AFA2-D007-4D8E-80D0-28AE6BFF1E20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Domain", "Nestor.Tools.Domain\Nestor.Tools.Domain.csproj", "{85D1ECAE-A84C-44C8-BFE1-D725FEA7F99F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools.Domain", "Nestor.Tools.Domain\Nestor.Tools.Domain.csproj", "{85D1ECAE-A84C-44C8-BFE1-D725FEA7F99F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Infrastructure", "Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj", "{9472E41D-3004-4F6E-B5A8-36F64751F23C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools.Infrastructure", "Nestor.Tools.Infrastructure\Nestor.Tools.Infrastructure.csproj", "{9472E41D-3004-4F6E-B5A8-36F64751F23C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Infrastructure.EntityFramework", "Nestor.Tools.Infrastructure.EntityFramework\Nestor.Tools.Infrastructure.EntityFramework.csproj", "{BC05E7FA-BE0E-4453-91B9-6201935135F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools.Infrastructure.EntityFramework", "Nestor.Tools.Infrastructure.EntityFramework\Nestor.Tools.Infrastructure.EntityFramework.csproj", "{BC05E7FA-BE0E-4453-91B9-6201935135F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Infrastructure.FluentNHibernate", "Nestor.Tools.Infrastructure.FluentNHibernate\Nestor.Tools.Infrastructure.FluentNHibernate.csproj", "{2F698444-358F-4AD1-9F8C-25EC2BE3A6AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools.Infrastructure.SqlServer", "Nestor.Tools.Infrastructure.SqlServer\Nestor.Tools.Infrastructure.SqlServer.csproj", "{237F808D-F0DE-417A-A3C7-6411B3BA7753}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Infrastructure.MultyTenancy", "Nestor.Tools.Infrastructure.MultyTenancy\Nestor.Tools.Infrastructure.MultyTenancy.csproj", "{27E23262-28F2-458D-93F6-2D939D896F05}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.AspNetCore", "Nestor.Tools.AspNetCore\Nestor.Tools.AspNetCore.csproj", "{3BC250EB-EFF6-41B8-A98C-E57852B4DE38}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Infrastructure.SqlServer", "Nestor.Tools.Infrastructure.SqlServer\Nestor.Tools.Infrastructure.SqlServer.csproj", "{237F808D-F0DE-417A-A3C7-6411B3BA7753}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nestor.Tools.Infrastructure.SqlKata", "Nestor.Tools.Infrastructure.SqlKata\Nestor.Tools.Infrastructure.SqlKata.csproj", "{2E58EE25-6DF4-446E-80DC-9ADC99E8E25B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nestor.Tools.Infrastructure.SqlKata", "Nestor.Tools.Infrastructure.SqlKata\Nestor.Tools.Infrastructure.SqlKata.csproj", "{2E58EE25-6DF4-446E-80DC-9ADC99E8E25B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6D6D7A0A-1176-44A3-9147-9AD219F884DB}"
 EndProject
@@ -49,18 +44,6 @@ Global
 		{BC05E7FA-BE0E-4453-91B9-6201935135F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC05E7FA-BE0E-4453-91B9-6201935135F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC05E7FA-BE0E-4453-91B9-6201935135F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F698444-358F-4AD1-9F8C-25EC2BE3A6AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F698444-358F-4AD1-9F8C-25EC2BE3A6AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F698444-358F-4AD1-9F8C-25EC2BE3A6AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F698444-358F-4AD1-9F8C-25EC2BE3A6AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27E23262-28F2-458D-93F6-2D939D896F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27E23262-28F2-458D-93F6-2D939D896F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27E23262-28F2-458D-93F6-2D939D896F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27E23262-28F2-458D-93F6-2D939D896F05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3BC250EB-EFF6-41B8-A98C-E57852B4DE38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3BC250EB-EFF6-41B8-A98C-E57852B4DE38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3BC250EB-EFF6-41B8-A98C-E57852B4DE38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3BC250EB-EFF6-41B8-A98C-E57852B4DE38}.Release|Any CPU.Build.0 = Release|Any CPU
 		{237F808D-F0DE-417A-A3C7-6411B3BA7753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{237F808D-F0DE-417A-A3C7-6411B3BA7753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{237F808D-F0DE-417A-A3C7-6411B3BA7753}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,5 +52,11 @@ Global
 		{2E58EE25-6DF4-446E-80DC-9ADC99E8E25B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E58EE25-6DF4-446E-80DC-9ADC99E8E25B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E58EE25-6DF4-446E-80DC-9ADC99E8E25B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31FB3927-22EF-4331-B9F2-9BA0C6B6FC1A}
 	EndGlobalSection
 EndGlobal
