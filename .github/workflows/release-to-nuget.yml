@@ -20,7 +20,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore $SOLUTION   
     - name: Build
-      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION --no-restore
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
     - name: Pack nugets
       run: dotnet pack -c Release --no-build --output .
     - name: Push to NuGet
