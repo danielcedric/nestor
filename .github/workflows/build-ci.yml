@@ -1,4 +1,4 @@
-name: CI - Build solution
+name: CI - Build and Tag
 
 on:
   push:
@@ -7,41 +7,34 @@ on:
   pull_request:
     branches:
       - main
-      
+
 jobs:
   build:
-    
+
     env:
       BUILD_CONFIG: 'Release'
       SOLUTION: 'Nestor.sln'
-      
+
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x.x
-        
+
       - name: Restore dependencies
         run: dotnet restore $SOLUTION
-          
+
       - name: Build
-        run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore 
-        
-      - name: Determines version of a repo based on git history
-        uses: kahuang/semantic-version@v4.3
+        run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
+
+      - name: Bump version and push tag
+        uses: hennejg/github-tag-action@v4.1.jh1
         with:
-          # The branch name
-          branch: main 
-          # The prefix to use to identify tags
-          tag_prefix: v
-          # A string which, if present in a git commit, indicates that a change represents a major (breaking) change
-          major_pattern: (MAJOR) # default is (MAJOR)
-          # A string which, if present in a git commit, indicates that a change represents a minor (feature) change
-          minor_pattern: (MINOR) # default is (MINOR)
-          # Pattern to use when formatting output version
-          format: ${major}.${minor}.${patch} # default is ${major}.${minor}.${patch}
-      
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          release_branches: main
+
+
