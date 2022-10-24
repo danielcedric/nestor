@@ -1,4 +1,4 @@
-name: NuGet-CD
+name: Deploy on NuGet - CD
 
 on:
   create:
