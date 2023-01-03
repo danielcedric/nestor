@@ -19,6 +19,10 @@ jobs:
       uses: actions/setup-dotnet@v3
     - name: Restore dependencies
       run: dotnet restore $SOLUTION   
+    - name: Install dotnet tool
+      run: dotnet tool install -g dotnetCampus.TagToVersion
+    - name: Set tag to version # https://medium.com/@lindexi_gd/how-to-generate-nuget-package-with-git-tag-version-using-github-action-207ff4040486
+      run: dotnet TagToVersion -t ${{ github.ref }}
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
     - name: Pack nugets
