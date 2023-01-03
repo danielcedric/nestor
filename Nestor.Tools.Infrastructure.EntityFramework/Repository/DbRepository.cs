@@ -13,6 +13,8 @@ using static Nestor.Tools.Infrastructure.EntityFramework.UnitOfWork.IUnitOfWork;
 using Nestor.Tools.Exceptions;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.ComponentModel.DataAnnotations;
+using Nestor.Tools.Domain.DataAnnotations;
+using Nestor.Tools.Helpers;
 
 namespace Nestor.Tools.Infrastructure.EntityFramework.Repository
 {
@@ -252,15 +254,60 @@ namespace Nestor.Tools.Infrastructure.EntityFramework.Repository
         ///     Obtient une <see cref="TEntity" /> depuis les propriétés qui composent sa clé unique
         /// </summary>
         /// <param name="obj"></param>
+        /// <exception cref="NoUniqueByAttributeForTypeException">Excpetion levée si l'entité ne dispose d'aucun <see cref="UniqueByAttribute"/> </exception>
+        /// <exception cref="UniqueByAttributeIsEmptyException"></exception>
         /// <returns></returns>
-        public abstract Task<TEntity> GetByUniqueKeyAsync(TEntity obj);
+        public virtual Task<TEntity> GetByUniqueKeyAsync(TEntity obj)
+        {
+            var uniqueByAttribute = typeof(TEntity).GetCustomAttributes(typeof(UniqueByAttribute), true).SingleOrDefault() as UniqueByAttribute;
+
+            if (uniqueByAttribute == null)
+                throw new NoUniqueByAttributeForTypeException<TEntity>();
+
+            if (!uniqueByAttribute.PropertyNames.Any())
+                throw new UniqueByAttributeIsEmptyException<TEntity>();
+
+            var uniqueKeyProperties = AttributeHelper.GetValueAndPropertyNameDictionary(obj, uniqueByAttribute.PropertyNames);
+
+            // Composition du critère de requête
+            var query = Query();
+            foreach (var uniqueKeyProperty in uniqueKeyProperties)
+            {
+                var prop = typeof(TEntity).GetProperty(uniqueKeyProperty.Key);
+                if (prop.PropertyType.IsSubclassOf(typeof(Entity)))
+                    throw new CantExecuteAutoUniqueKeyQueryOnClassPropertyException(uniqueKeyProperty.Key);
+                else
+                {
+                    ParameterExpression pe = Expression.Parameter(typeof(TEntity));
+
+                    // Le type est un type valeur
+                    if (uniqueKeyProperty.Value == null)
+                    {
+                        // Cas de la valeur nulle
+                        Expression left = Expression.Property(pe, uniqueKeyProperty.Key);
+                        Expression right = Expression.Constant(null, typeof(object));
+
+                        Expression expression = Expression.Equal(left, right);
+                    }
+                    else
+                    {
+                        Expression left = Expression.Property(pe, uniqueKeyProperty.Key);
+                        Expression right = Expression.Constant(uniqueKeyProperty.Value);
+
+                        Expression expression = Expression.Equal(left, right);
+                    }
+                }
+            }
+
+            return query.SingleOrDefaultAsync();
+        }
 
         /// <summary>
         ///     Obtient une <see cref="TEntity" /> depuis les propriétés qui composent sa clé unique
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public TEntity GetByUniqueKey(TEntity obj)
+        public virtual TEntity GetByUniqueKey(TEntity obj)
         {
             return GetByUniqueKeyAsync(obj).Result;
         }
